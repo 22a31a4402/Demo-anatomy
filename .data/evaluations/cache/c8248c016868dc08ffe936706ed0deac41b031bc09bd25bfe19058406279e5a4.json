@@ -1,0 +1,77 @@
+{
+  "cacheKey": "c8248c016868dc08ffe936706ed0deac41b031bc09bd25bfe19058406279e5a4",
+  "report": {
+    "studentName": "Dr. Rahul Sharma",
+    "testTitle": "Gross Anatomy Paper 1",
+    "testTopics": "General Assessment Syllabus",
+    "testDate": "2026-11-03",
+    "totalScore": 14,
+    "maxScore": 20,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 8,
+        "maxMarks": 10,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Correctly identified all roots C5-T1, trunks, and cords.",
+          "Axillary artery relations were precisely detailed.",
+          "Neat diagram included with labeled cords and branches."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2",
+        "marks": 6,
+        "maxMarks": 10,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Superior thyroid artery from external carotid artery correctly stated.",
+          "Inferior thyroid artery relations with recurrent laryngeal nerve thoroughly explained.",
+          "Venous drainage omitted middle thyroid vein draining into internal jugular vein."
+        ],
+        "isFlagged": true,
+        "flaggedComment": "Official answer key requires all three venous drainage pathways (superior, middle, inferior) for full marks. The manual notes awarded 8 marks overlooking the omitted middle thyroid vein. Adjusted to 6/10 per official marking rubric."
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Evaluation assessment successfully verified."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Subject concepts evaluated against official key."
+      ],
+      "completenessOfAnswers": [
+        "Answer depth and coverage reviewed."
+      ],
+      "presentationDiagrams": [
+        "Presentation and structure reviewed."
+      ],
+      "investigations": [
+        "Methodology steps reviewed."
+      ],
+      "attemptingQuestions": [
+        "Question attempt coverage reviewed."
+      ],
+      "actionPoints": [
+        "Review key concepts for continuous academic improvement."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "0127e3c0-6207-4454-b456-afc4c2a82131",
+    "timestamp": 1793752821280,
+    "answerKeyId": "ak_1793752821256_72ff4eb81911",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "uploaded"
+  },
+  "timestamp": 1793752821280,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 2600,
+  "outputTokens": 800,
+  "estimatedCostSaved": 0.00058,
+  "institutionId": "inst_anatomy_guru",
+  "createdBy": "faculty_anatomy_01"
+}

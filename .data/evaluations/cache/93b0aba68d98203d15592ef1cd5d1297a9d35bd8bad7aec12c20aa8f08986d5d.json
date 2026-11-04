@@ -1,0 +1,77 @@
+{
+  "cacheKey": "93b0aba68d98203d15592ef1cd5d1297a9d35bd8bad7aec12c20aa8f08986d5d",
+  "report": {
+    "studentName": "Dr. Rahul Sharma",
+    "testTitle": "Gross Anatomy Paper 1",
+    "testTopics": "General Assessment Syllabus",
+    "testDate": "2026-11-03",
+    "totalScore": 16,
+    "maxScore": 20,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 8,
+        "maxMarks": 10,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Correctly traced roots from C5 to T1 and formed trunks and cords accurately.",
+          "Axillary artery relations clearly documented with neurovascular bundle landmarks.",
+          "Diagram was neat and clearly demarcated terminal nerves.",
+          "Mentioned Erb palsy presentation, but Klumpke intrinsic hand muscle clawing was brief."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2",
+        "marks": 8,
+        "maxMarks": 10,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Superior and inferior thyroid arteries correctly identified with parent vessels.",
+          "Highlighted critical relation of inferior thyroid artery with recurrent laryngeal nerve.",
+          "Venous drainage complete including middle thyroid vein draining into IJV."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Evaluation assessment successfully verified."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Subject concepts evaluated against official key."
+      ],
+      "completenessOfAnswers": [
+        "Answer depth and coverage reviewed."
+      ],
+      "presentationDiagrams": [
+        "Presentation and structure reviewed."
+      ],
+      "investigations": [
+        "Methodology steps reviewed."
+      ],
+      "attemptingQuestions": [
+        "Question attempt coverage reviewed."
+      ],
+      "actionPoints": [
+        "Review key concepts for continuous academic improvement."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "af0b0232-3447-441c-99a9-c9a593fc73c5",
+    "timestamp": 1793752821276,
+    "answerKeyId": "ak_1793752821256_72ff4eb81911",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "uploaded"
+  },
+  "timestamp": 1793752821276,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 2200,
+  "outputTokens": 750,
+  "estimatedCostSaved": 0.00052,
+  "institutionId": "inst_anatomy_guru",
+  "createdBy": "faculty_anatomy_01"
+}

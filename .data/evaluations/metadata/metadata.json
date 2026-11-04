@@ -1,9 +1,9 @@
 {
-  "evaluationId": "eb8345d3-404d-4bae-ad2a-6ad9754a7042",
-  "correlationId": "eval_1793749708440_02493894",
-  "studentName": "Student Approved Key Test",
-  "testTitle": "Academic Assessment",
-  "mode": "without-manual",
+  "evaluationId": "0127e3c0-6207-4454-b456-afc4c2a82131",
+  "correlationId": "eval_test_wm_02",
+  "studentName": "Dr. Rahul Sharma",
+  "testTitle": "Gross Anatomy Paper 1",
+  "mode": "with-manual",
   "evaluationStatus": "completed",
   "error": null,
   "model": "gemini-3.8-flash",
@@ -11,36 +11,36 @@
     "gemini-3.8-flash"
   ],
   "tokens": {
-    "inputTokens": 4200,
-    "outputTokens": 850,
-    "cachedTokens": 1200,
-    "totalTokens": 5050
+    "inputTokens": 2600,
+    "outputTokens": 800,
+    "cachedTokens": 0,
+    "totalTokens": 3400
   },
   "extractionCost": {
-    "usd": 0.00038,
-    "inr": 0.0323
+    "usd": null,
+    "inr": null
   },
   "gradingCost": {
-    "usd": 0.00029,
-    "inr": 0.0247
+    "usd": 0.00058,
+    "inr": 0.0493
   },
   "totalCost": {
-    "usd": 0.00067,
-    "inr": 0.057
+    "usd": 0.00058,
+    "inr": 0.0493
   },
   "stages": {
     "extraction": {
-      "status": "success",
-      "calls": 1,
+      "status": "not_attempted",
+      "calls": 0,
       "retries": 0,
-      "model": "gemini-3.8-flash",
+      "model": null,
       "latencyMs": 0,
-      "inputTokens": 2200,
-      "outputTokens": 400,
-      "cachedTokens": 0,
-      "totalTokens": 2600,
-      "costUsd": 0.00038,
-      "costInr": 0.0323
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
     },
     "grading": {
       "status": "success",
@@ -48,18 +48,18 @@
       "retries": 0,
       "model": "gemini-3.8-flash",
       "latencyMs": 0,
-      "inputTokens": 2000,
-      "outputTokens": 450,
-      "cachedTokens": 1200,
-      "totalTokens": 2450,
-      "costUsd": 0.00029,
-      "costInr": 0.0247
+      "inputTokens": 2600,
+      "outputTokens": 800,
+      "cachedTokens": 0,
+      "totalTokens": 3400,
+      "costUsd": 0.00058,
+      "costInr": 0.0493
     }
   },
   "retries": 0,
   "fallbacks": 0,
-  "apiCalls": 2,
-  "successfulCalls": 2,
+  "apiCalls": 1,
+  "successfulCalls": 1,
   "failedCalls": 0,
   "apiLatencyMs": 0,
   "latencyMs": 1,
@@ -74,6 +74,6 @@
     "dataSource": "SIMULATED_MOCK",
     "isPartial": false
   },
-  "timestamp": 1793749718569,
-  "createdAt": "2026-11-03T23:48:38.569Z"
+  "timestamp": 1793752821280,
+  "createdAt": "2026-11-04T00:40:21.280Z"
 }

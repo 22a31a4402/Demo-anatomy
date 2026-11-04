@@ -1,0 +1,88 @@
+{
+  "id": "ak_1793752821256_72ff4eb81911",
+  "examId": "exam_1793752821267",
+  "title": "Gross Anatomy Official Key",
+  "sourceMode": "uploaded",
+  "version": 1,
+  "status": "approved",
+  "printedMaxMarks": 20,
+  "totalMaxMarks": 20,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 20,
+    "calculatedTotalMarks": 20,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 20
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 20
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Describe the Brachial Plexus in detail including roots, trunks, cords, branches, and clinical correlations.",
+      "maxMarks": 10,
+      "referenceAnswer": "Roots C5-T1, Upper/Middle/Lower trunks, Anterior/Posterior divisions, Lateral/Medial/Posterior cords. Axillary relations. Erb and Klumpke palsies.",
+      "expectedConcepts": [],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "[object Object]",
+        "[object Object]",
+        "[object Object]",
+        "[object Object]"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.95
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Describe the blood supply of the thyroid gland.",
+      "maxMarks": 10,
+      "referenceAnswer": "Superior thyroid artery (ECA branch), Inferior thyroid artery (thyrocervical trunk), Thyroid ima artery (occasional). Venous drainage to IJV and brachiocephalic vein.",
+      "expectedConcepts": [],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "[object Object]",
+        "[object Object]",
+        "[object Object]"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.95
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_anatomy_guru",
+    "createdBy": "faculty_anatomy_01",
+    "createdAt": 1793752821267,
+    "updatedAt": 1793752821268,
+    "sourceDocName": "Official_Key_nonce_1793752821255_vudok.pdf",
+    "approvedAt": 1793752821268,
+    "approvedBy": "faculty_anatomy_01"
+  },
+  "questionPaperFingerprint": "0917567b15f5171dbc8279f45db7f2e92bc55e7b62281f30c8a00a175532bbf0",
+  "referencePairHash": "810b882d612dc4224b26e25d8ae79276c2338b442fc29bd5784504763bc5701b",
+  "sourceQuestionPaperDoc": {
+    "name": "Gross_Anatomy_QP_nonce_1793752821255_vudok.pdf",
+    "text": "Exam Code: nonce_1793752821255_vudok\nQ1. Describe the anatomy of the Brachial Plexus with relations and clinical anatomy. (10 marks)\nQ2. Blood supply of thyroid gland. (10 marks)"
+  },
+  "sourceAnswerKeyDoc": {
+    "name": "Official_Key_nonce_1793752821255_vudok.pdf",
+    "text": "Exam Code: nonce_1793752821255_vudok\nModel 1: Brachial Plexus Roots C5-T1, trunks, cords, branches.\nModel 2: Thyroid arterial & venous supply."
+  }
+}

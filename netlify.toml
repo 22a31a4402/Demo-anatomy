@@ -17,7 +17,7 @@
 
 [functions]
   node_bundler = "esbuild"
-  included_files = ["dist/**"]
+  external_node_modules = ["vite", "@vitejs/plugin-react", "@tailwindcss/vite", "lightningcss", "esbuild", "tsx"]
 
 # Route API endpoints directly to Netlify serverless functions
 [[redirects]]
