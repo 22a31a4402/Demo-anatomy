@@ -35,7 +35,7 @@ export const getGeminiClient = (): GoogleGenAI => {
       apiKey: config.geminiApiKey,
       httpOptions: {
         headers: {
-          'User-Agent': 'aistudio-build',
+          'User-Agent': 'anatomy-guru-eval',
         },
       },
     });

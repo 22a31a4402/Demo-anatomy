@@ -8,7 +8,8 @@
     "start": "tsx server.ts",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "netlify:dev": "netlify dev"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

@@ -7,6 +7,14 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
 
+# Local Netlify CLI orchestration (npx netlify dev)
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 3000
+  publish = "dist"
+  autoLaunch = false
+
 [functions]
   node_bundler = "esbuild"
   included_files = ["dist/**"]

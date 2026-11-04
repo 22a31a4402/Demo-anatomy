@@ -2,6 +2,10 @@
  * Centralized Server Configuration for NextGen Eval Dedicated Backend
  */
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 if (typeof (process as any).loadEnvFile === 'function') {
   try {
     (process as any).loadEnvFile();
