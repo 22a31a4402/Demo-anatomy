@@ -1,0 +1,58 @@
+{
+  "jobId": "batch_job_7_inst_batch_1793749708423_acc2",
+  "institutionId": "inst_batch_1793749708423_acc2",
+  "correlationId": "corr_b_7",
+  "totalCalls": 1,
+  "successfulCalls": 1,
+  "failedCalls": 0,
+  "retriedCalls": 0,
+  "fallbackCalls": 0,
+  "totalInputTokens": 70000,
+  "totalOutputTokens": 14000,
+  "totalCachedTokens": 7000,
+  "totalTokens": 84000,
+  "totalEstimatedCostUsd": 0.012075,
+  "totalEstimatedCostInr": 1.0264,
+  "retryAndFallbackCostUsd": 0,
+  "stageBreakdown": {
+    "grading": {
+      "calls": 1,
+      "costUsd": 0.012075,
+      "tokens": 84000
+    }
+  },
+  "modelsUsed": [
+    "gemini-3.8-flash"
+  ],
+  "pricingVersion": "pricing_v2.1_2026_05",
+  "exchangeRateUsed": 85,
+  "usageCompleteness": "COMPLETE",
+  "dataSource": "SIMULATED_MOCK",
+  "calls": [
+    {
+      "callId": "call_1793749708424_b6f61c",
+      "jobId": "batch_job_7_inst_batch_1793749708423_acc2",
+      "correlationId": "corr_b_7",
+      "institutionId": "inst_batch_1793749708423_acc2",
+      "pipelineStage": "grading",
+      "requestedModel": "gemini-3.8-flash",
+      "actualModel": "gemini-3.8-flash",
+      "attemptNumber": 1,
+      "isFallback": false,
+      "status": "success",
+      "latencyMs": 1200,
+      "inputTokens": 70000,
+      "outputTokens": 14000,
+      "cachedInputTokens": 7000,
+      "totalTokens": 84000,
+      "usageSource": "SIMULATED_MOCK",
+      "estimatedCostUsd": 0.012075,
+      "estimatedCostInr": 1.0264,
+      "pricingVersion": "pricing_v2.1_2026_05",
+      "pricingTierUsed": "gemini-3.8-flash",
+      "timestamp": 1793749708424
+    }
+  ],
+  "createdAt": 1793749708424,
+  "updatedAt": 1793749708424
+}

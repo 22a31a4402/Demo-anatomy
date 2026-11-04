@@ -1,0 +1,68 @@
+{
+  "id": "ak_1793749708447_ababc58456bd",
+  "examId": "exam_1793749708447",
+  "title": "Unspecified Marks Exam",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "needs_review",
+  "totalMaxMarks": 0,
+  "marksValidation": {
+    "hasDiscrepancy": true,
+    "calculatedTotalMarks": 0,
+    "difference": 0,
+    "discrepancyMessages": [
+      "Question 1 has missing or unassigned marks."
+    ],
+    "offendingQuestions": [
+      "1"
+    ],
+    "sectionTotals": {
+      "General": 0
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 1,
+        "calculatedTotalMarks": 0
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "maxMarks": 0,
+      "referenceAnswer": "Model answer without known marks",
+      "expectedConcepts": [
+        "Concept 1"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [],
+      "diagramReferences": [],
+      "confidence": 0.9,
+      "flaggedIssue": "Missing maximum marks in question paper - instructor review required"
+    }
+  ],
+  "warnings": [
+    "Question 1: Missing marks in prompt.",
+    "Question 1: Missing explicit maximum marks.",
+    "Question 1 has missing or unassigned marks."
+  ],
+  "metadata": {
+    "institutionId": "inst_aarshiv_1793749708429",
+    "createdBy": "prof_sharma_1793749708429",
+    "createdAt": 1793749708448,
+    "updatedAt": 1793749708448,
+    "sourceDocName": "QP_No_Marks.pdf"
+  },
+  "questionPaperFingerprint": "fb6230a4100252fca745331f20316faec40531f1334e900ab2bc15fbe67bb052",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_No_Marks.pdf",
+    "text": "Explain cell structure."
+  }
+}

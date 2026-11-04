@@ -1,0 +1,41 @@
+{
+  "id": "ak_genuine_hier_dup_05",
+  "examId": "exam_hier_dup_05",
+  "title": "Hierarchical Duplicate Exam",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "draft",
+  "totalMaxMarks": 10,
+  "questions": [
+    {
+      "questionId": "1.1",
+      "maxMarks": 5,
+      "referenceAnswer": "First 1.1 answer",
+      "expectedConcepts": [
+        "Concept 1"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    },
+    {
+      "questionId": "1.1",
+      "maxMarks": 5,
+      "referenceAnswer": "Second 1.1 answer",
+      "expectedConcepts": [
+        "Concept 2"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_aarshiv_1793749708429",
+    "createdBy": "prof_sharma_1793749708429",
+    "createdAt": 1793749709826,
+    "updatedAt": 1793749709826
+  }
+}

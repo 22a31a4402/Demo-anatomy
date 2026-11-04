@@ -1,0 +1,112 @@
+{
+  "id": "ak_1793749709841_c3ad901b054c",
+  "examId": "exam_1793749709842",
+  "title": "Data Structures & Algorithms",
+  "subject": "Computer Science",
+  "grade": "B.Tech / CS Year 2",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "approved",
+  "printedMaxMarks": 15,
+  "totalMaxMarks": 15,
+  "marksValidation": {
+    "hasDiscrepancy": true,
+    "printedMaxMarks": 15,
+    "calculatedTotalMarks": 15,
+    "difference": 0,
+    "discrepancyMessages": [
+      "Ambiguous choice in Question 2: Question prompt/text suggests an alternative choice (\"OR\"), but question is not assigned to a choice group. Flagged for faculty review."
+    ],
+    "offendingQuestions": [
+      "2"
+    ],
+    "sectionTotals": {
+      "General": 15
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 15
+      }
+    ],
+    "ambiguousChoices": [
+      "Ambiguous choice in Question 2: Question prompt/text suggests an alternative choice (\"OR\"), but question is not assigned to a choice group. Flagged for faculty review."
+    ],
+    "hasAmbiguousChoices": true,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Implement binary search in Python. Explain time complexity O(log n) and edge case handling for empty list.",
+      "maxMarks": 8,
+      "referenceAnswer": "def binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target: return mid\n        elif arr[mid] < target: low = mid + 1\n        else: high = mid - 1\n    return -1\nTime complexity is O(log n) as search space halves each iteration.",
+      "expectedConcepts": [
+        "Pointers initialization",
+        "While loop condition low <= high",
+        "Mid calculation preventing overflow",
+        "Halving logic",
+        "O(log n) proof",
+        "Empty array returns -1"
+      ],
+      "acceptableAlternatives": [
+        "Recursive implementation",
+        "left, right or l, r variable naming",
+        "mid = low + (high - low) // 2"
+      ],
+      "markingCriteria": [
+        "4 marks for correct Python code",
+        "2 marks for boundary & empty list handling",
+        "2 marks for O(log n) derivation"
+      ],
+      "diagramReferences": [
+        "Search space halving recursion tree / interval diagram"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Draw the logic circuit diagram of a 2-to-1 Multiplexer and write its boolean truth table.",
+      "maxMarks": 7,
+      "referenceAnswer": "Y = (A AND NOT S) OR (B AND S). Circuit contains 1 NOT gate, 2 AND gates, and 1 OR gate.",
+      "expectedConcepts": [
+        "Boolean expression Y = A*S_bar + B*S",
+        "Truth table with inputs S, A, B and output Y",
+        "Logic gates schematic"
+      ],
+      "acceptableAlternatives": [
+        "NAND-only implementation"
+      ],
+      "markingCriteria": [
+        "3 marks for Boolean truth table",
+        "4 marks for correctly interconnected logic gates"
+      ],
+      "diagramReferences": [
+        "2-to-1 Multiplexer logic gate schematic showing NOT, AND, OR gates"
+      ],
+      "confidence": 0.96
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_cs_01",
+    "createdBy": "prof_turing",
+    "createdAt": 1793749709842,
+    "updatedAt": 1793749709842,
+    "sourceDocName": "QP_ComputerScience.pdf",
+    "approvedAt": 1793749709842,
+    "approvedBy": "prof_turing"
+  },
+  "questionPaperFingerprint": "483bafae497e0dcfd120cbb7d70904f27cdedab3637c2f4b956bc03a231c3188",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_ComputerScience.pdf",
+    "text": "Write a Python function def binary_search(arr, target): that returns the index of target in O(log n) time.",
+    "base64": "B64_CODE",
+    "mimeType": "application/pdf"
+  }
+}

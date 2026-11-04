@@ -1,0 +1,82 @@
+{
+  "jobId": "job_retry_1793749707881_da97",
+  "institutionId": "inst_aarshiv_01",
+  "correlationId": "corr_ledger_retry",
+  "totalCalls": 2,
+  "successfulCalls": 1,
+  "failedCalls": 1,
+  "retriedCalls": 1,
+  "fallbackCalls": 0,
+  "totalInputTokens": 2000,
+  "totalOutputTokens": 500,
+  "totalCachedTokens": 400,
+  "totalTokens": 2500,
+  "totalEstimatedCostUsd": 0.00037,
+  "totalEstimatedCostInr": 0.0314,
+  "retryAndFallbackCostUsd": 0.00037,
+  "stageBreakdown": {
+    "grading": {
+      "calls": 2,
+      "costUsd": 0.00037,
+      "tokens": 2500
+    }
+  },
+  "modelsUsed": [
+    "gemini-3.8-flash"
+  ],
+  "pricingVersion": "pricing_v2.1_2026_05",
+  "exchangeRateUsed": 85,
+  "usageCompleteness": "COMPLETE",
+  "dataSource": "SIMULATED_MOCK",
+  "calls": [
+    {
+      "callId": "call_1793749707883_7e448f",
+      "jobId": "job_retry_1793749707881_da97",
+      "correlationId": "corr_ledger_retry",
+      "institutionId": "inst_aarshiv_01",
+      "pipelineStage": "grading",
+      "requestedModel": "gemini-3.8-flash",
+      "actualModel": "gemini-3.8-flash",
+      "attemptNumber": 1,
+      "isFallback": false,
+      "status": "failed",
+      "errorCategory": "TRANSIENT_SERVER",
+      "latencyMs": 1,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedInputTokens": null,
+      "totalTokens": null,
+      "usageSource": "SIMULATED_MOCK",
+      "estimatedCostUsd": null,
+      "estimatedCostInr": null,
+      "pricingVersion": "pricing_v2.1_2026_05",
+      "pricingTierUsed": "gemini-3.8-flash",
+      "timestamp": 1793749707883
+    },
+    {
+      "callId": "call_1793749708421_17f166",
+      "jobId": "job_retry_1793749707881_da97",
+      "correlationId": "corr_ledger_retry",
+      "institutionId": "inst_aarshiv_01",
+      "pipelineStage": "grading",
+      "requestedModel": "gemini-3.8-flash",
+      "actualModel": "gemini-3.8-flash",
+      "attemptNumber": 2,
+      "isFallback": false,
+      "status": "success",
+      "latencyMs": 1,
+      "inputTokens": 2000,
+      "outputTokens": 500,
+      "cachedInputTokens": 400,
+      "totalTokens": 2500,
+      "usageSource": "SIMULATED_MOCK",
+      "estimatedCostUsd": 0.00037,
+      "estimatedCostInr": 0.0314,
+      "pricingVersion": "pricing_v2.1_2026_05",
+      "pricingTierUsed": "gemini-3.8-flash",
+      "timestamp": 1793749708421
+    }
+  ],
+  "createdAt": 1793749707883,
+  "updatedAt": 1793749708421
+}

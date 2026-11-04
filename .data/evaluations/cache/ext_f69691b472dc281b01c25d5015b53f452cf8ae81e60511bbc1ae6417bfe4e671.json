@@ -1,0 +1,22 @@
+{
+  "studentName": "Virginia Woolf",
+  "examTitle": "English Literature & European History",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "Shakespeare portrays ambition not merely as desire, but as an overwhelming pathology. In Act 1, Macbeth acknowledges \"vaulting ambition which o'erleaps itself\". By Act 5, ambition has emptied life of meaning, culminating in the nihilistic despair of \"a tale told by an idiot, full of sound and fury\". Lady Macbeth's obsessive washing of hands externalizes guilt that water cannot purge.",
+      "isAttempted": true,
+      "confidence": 0.99,
+      "flaggedUncertain": false
+    },
+    {
+      "questionId": "2",
+      "studentAnswerText": "The 1789 Revolution stemmed from systemic fiscal bankruptcy aggravated by war debts, combined with the regressive taxation of the Third Estate while the nobility and clergy enjoyed exemptions. Enlightenment writings questioned divine right absolutism, while catastrophic grain harvest failures in 1788 sparked urban riots and the storming of the Bastille.",
+      "isAttempted": true,
+      "confidence": 0.98,
+      "flaggedUncertain": false
+    }
+  ],
+  "visualEvidenceRetained": false,
+  "extractedAt": 1793749709855
+}

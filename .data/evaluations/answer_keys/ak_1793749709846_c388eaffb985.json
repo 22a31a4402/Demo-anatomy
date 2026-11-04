@@ -1,0 +1,100 @@
+{
+  "id": "ak_1793749709846_c388eaffb985",
+  "examId": "exam_1793749709846",
+  "title": "Organic & Physical Chemistry Mid-Term",
+  "subject": "Chemistry",
+  "grade": "B.Sc Chemistry",
+  "sourceMode": "uploaded",
+  "version": 1,
+  "status": "approved",
+  "printedMaxMarks": 10,
+  "totalMaxMarks": 10,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 10,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Write and balance the complete combustion reaction of ethanol (C2H5OH).",
+      "maxMarks": 4,
+      "referenceAnswer": "C2H5OH(l) + 3 O2(g) -> 2 CO2(g) + 3 H2O(l) + Heat",
+      "expectedConcepts": [
+        "Reactants: C2H5OH + O2",
+        "Products: CO2 + H2O",
+        "Correct stoichiometric coefficients (1, 3 -> 2, 3)"
+      ],
+      "acceptableAlternatives": [
+        "Unstated physical states if coefficients are balanced"
+      ],
+      "markingCriteria": [
+        "2 marks for correct products",
+        "2 marks for stoichiometric balancing"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.99
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Describe the SN2 mechanism for reaction of chloromethane with hydroxide ion. Include stereochemistry.",
+      "maxMarks": 6,
+      "referenceAnswer": "Backside nucleophilic attack of OH- on CH3Cl creates a pentacoordinate transition state [HO...CH3...Cl]-, expels Cl- leaving group, leading to inversion of configuration (Walden inversion).",
+      "expectedConcepts": [
+        "Bimolecular nucleophilic substitution",
+        "Backside attack",
+        "Pentacoordinate transition state",
+        "Walden inversion"
+      ],
+      "acceptableAlternatives": [
+        "Detailed orbital diagram showing sp3 to sp2 transition state"
+      ],
+      "markingCriteria": [
+        "2 marks for backside attack mechanism",
+        "2 marks for transition state representation",
+        "2 marks for Walden inversion statement"
+      ],
+      "diagramReferences": [
+        "Backside attack arrow and pentacoordinate transition state diagram"
+      ],
+      "confidence": 0.96
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_chem_01",
+    "createdBy": "prof_mendeleev",
+    "createdAt": 1793749709846,
+    "updatedAt": 1793749709847,
+    "sourceDocName": "Chemistry_Key_Official.pdf",
+    "approvedAt": 1793749709847,
+    "approvedBy": "prof_mendeleev"
+  },
+  "referencePairHash": "ed473643dc3e67cb047d780484b0467821e0f37a0638b2c5cf95c63a1f14c6ba",
+  "sourceAnswerKeyDoc": {
+    "name": "Chemistry_Key_Official.pdf",
+    "text": "Q1. Combustion: C2H5OH + 3O2 -> 2CO2 + 3H2O (4 marks). Q2. SN2 backside attack and Walden inversion (6 marks).",
+    "base64": "CHEM_KEY_B64",
+    "mimeType": "application/pdf"
+  }
+}

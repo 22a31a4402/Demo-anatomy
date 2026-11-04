@@ -1,0 +1,89 @@
+{
+  "id": "ak_1793749708438_7899cea01913",
+  "examId": "exam_1793749708438",
+  "title": "Extracted Official Model Answer Key",
+  "subject": "Anatomy",
+  "grade": "MBBS Year 1",
+  "sourceMode": "uploaded",
+  "version": 1,
+  "status": "draft",
+  "printedMaxMarks": 15,
+  "totalMaxMarks": 15,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 15,
+    "calculatedTotalMarks": 15,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 15
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 15
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "maxMarks": 10,
+      "referenceAnswer": "Model answer for Question 1 from faculty notes.",
+      "expectedConcepts": [
+        "Concept A",
+        "Concept B"
+      ],
+      "acceptableAlternatives": [
+        "Alternative 1"
+      ],
+      "markingCriteria": [
+        "5 marks for part 1",
+        "5 marks for part 2"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.96
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "maxMarks": 5,
+      "referenceAnswer": "Model answer for Question 2.",
+      "expectedConcepts": [
+        "Concept C"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks for comprehensive answer"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.92
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_aarshiv_1793749708429",
+    "createdBy": "prof_sharma_1793749708429",
+    "createdAt": 1793749708438,
+    "updatedAt": 1793749708438,
+    "sourceDocName": "Official_Key_Anatomy.pdf"
+  },
+  "questionPaperFingerprint": "e73ed78d61bd0927a8fb9b15b042701a167d76c934f259eac6cb625303bb7a20",
+  "referencePairHash": "aae3f9ee9461aa921f78f7b262d9a8638b822a559f2733cf03e1d3d957f35531",
+  "sourceQuestionPaperDoc": {
+    "name": "Question_Paper_Anatomy.pdf",
+    "text": "Question 1: Course of median nerve (10 marks). Question 2: Carpal bones (5 marks)."
+  },
+  "sourceAnswerKeyDoc": {
+    "name": "Official_Key_Anatomy.pdf",
+    "text": "Official Marking Scheme: Q1. Median nerve model answer (10 marks). Q2. Carpal bones and syndrome (5 marks)."
+  }
+}

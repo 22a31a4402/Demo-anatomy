@@ -1,0 +1,79 @@
+{
+  "evaluationId": "47913403-1535-452f-8502-e8926a0b929b",
+  "correlationId": "eval_1793749708425_9b1608c9",
+  "studentName": "Phase 2 Test Student",
+  "testTitle": "Upper Limb Anatomy & Embryology",
+  "mode": "without-manual",
+  "evaluationStatus": "completed",
+  "error": null,
+  "model": "gemini-3.8-flash",
+  "modelsUsed": [
+    "gemini-3.8-flash"
+  ],
+  "tokens": {
+    "inputTokens": 15000,
+    "outputTokens": 3500,
+    "cachedTokens": 2000,
+    "totalTokens": 18500
+  },
+  "extractionCost": {
+    "usd": null,
+    "inr": null
+  },
+  "gradingCost": {
+    "usd": 0.00275,
+    "inr": 0.2337
+  },
+  "totalCost": {
+    "usd": 0.00275,
+    "inr": 0.2337
+  },
+  "stages": {
+    "extraction": {
+      "status": "skipped",
+      "calls": 0,
+      "retries": 0,
+      "model": null,
+      "latencyMs": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    },
+    "grading": {
+      "status": "success",
+      "calls": 1,
+      "retries": 0,
+      "model": "gemini-3.8-flash",
+      "latencyMs": 0,
+      "inputTokens": 15000,
+      "outputTokens": 3500,
+      "cachedTokens": 2000,
+      "totalTokens": 18500,
+      "costUsd": 0.00275,
+      "costInr": 0.2337
+    }
+  },
+  "retries": 0,
+  "fallbacks": 0,
+  "apiCalls": 1,
+  "successfulCalls": 1,
+  "failedCalls": 0,
+  "apiLatencyMs": 0,
+  "latencyMs": 0,
+  "pricing": {
+    "version": "pricing_v2.1_2026_05",
+    "exchangeRateUsed": 85
+  },
+  "zeroFabrication": {
+    "isCostCalculable": true,
+    "uncalculatedReason": null,
+    "usageCompleteness": "COMPLETE",
+    "dataSource": "SIMULATED_MOCK",
+    "isPartial": false
+  },
+  "timestamp": 1793749718549,
+  "createdAt": "2026-11-03T23:48:38.549Z"
+}

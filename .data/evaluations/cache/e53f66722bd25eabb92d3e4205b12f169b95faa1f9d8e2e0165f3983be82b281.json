@@ -1,0 +1,74 @@
+{
+  "cacheKey": "e53f66722bd25eabb92d3e4205b12f169b95faa1f9d8e2e0165f3983be82b281",
+  "report": {
+    "studentName": "Ada Lovelace",
+    "testTitle": "Data Structures & Algorithms",
+    "testTopics": "Search Algorithms & Digital Logic",
+    "testDate": "2026-10-30",
+    "totalScore": 15,
+    "maxScore": 15,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 8,
+        "maxMarks": 8,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Correct Python implementation using safe midpoint calculation.",
+          "Robust empty array handling verified.",
+          "Accurate O(log n) time complexity proof."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2",
+        "marks": 7,
+        "maxMarks": 7,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Accurate 2-to-1 MUX truth table.",
+          "Properly routed NOT, AND, and OR logic gate schematic."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Exemplary algorithmic thinking and digital logic proficiency."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Syntactically and logically correct code."
+      ],
+      "completenessOfAnswers": [
+        "Both algorithm and schematic thoroughly developed."
+      ],
+      "presentationDiagrams": [
+        "Standard logic gate symbols correctly used in schematic."
+      ],
+      "investigations": [
+        "Midpoint calculation prevents integer overflow."
+      ],
+      "attemptingQuestions": [
+        "Complete question coverage."
+      ],
+      "actionPoints": [
+        "Explore non-linear search algorithms (e.g. ternary search)."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "eval_cs_1793749709842",
+    "timestamp": 1793749709845,
+    "answerKeyId": "ak_1793749709841_c3ad901b054c",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "ai_generated"
+  },
+  "timestamp": 1793749709845,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 1800,
+  "outputTokens": 400,
+  "estimatedCostSaved": 0.00034,
+  "institutionId": "inst_cs_01"
+}

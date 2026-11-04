@@ -1,0 +1,87 @@
+{
+  "id": "ak_mixed_numbering_04",
+  "examId": "exam_mixed_04",
+  "title": "Mixed Numbering Exam",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "approved",
+  "totalMaxMarks": 20,
+  "questions": [
+    {
+      "questionId": "1.a",
+      "maxMarks": 5,
+      "referenceAnswer": "Answer 1.a",
+      "expectedConcepts": [
+        "Concept 1.a"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    },
+    {
+      "questionId": "1.b",
+      "maxMarks": 5,
+      "referenceAnswer": "Answer 1.b",
+      "expectedConcepts": [
+        "Concept 1.b"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    },
+    {
+      "questionId": "2(a)",
+      "maxMarks": 5,
+      "referenceAnswer": "Answer 2(a)",
+      "expectedConcepts": [
+        "Concept 2(a)"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    },
+    {
+      "questionId": "Section A - 3.1",
+      "maxMarks": 5,
+      "referenceAnswer": "Answer Section A - 3.1",
+      "expectedConcepts": [
+        "Section Concept"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_aarshiv_1793749708429",
+    "createdBy": "prof_sharma_1793749708429",
+    "createdAt": 1793749709826,
+    "updatedAt": 1793749709826,
+    "approvedAt": 1793749709826,
+    "approvedBy": "prof_sharma_1793749708429"
+  },
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "calculatedTotalMarks": 20,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 20
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 4,
+        "calculatedTotalMarks": 20
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  }
+}

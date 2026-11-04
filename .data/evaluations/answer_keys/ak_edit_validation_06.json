@@ -1,0 +1,61 @@
+{
+  "id": "ak_edit_validation_06",
+  "examId": "exam_edit_06",
+  "title": "Edit Validation Exam",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "draft",
+  "totalMaxMarks": 10,
+  "questions": [
+    {
+      "questionId": "1.1",
+      "maxMarks": 5,
+      "referenceAnswer": "Updated 1.1",
+      "expectedConcepts": [
+        "Concept 1.1"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    },
+    {
+      "questionId": "1.2",
+      "maxMarks": 5,
+      "referenceAnswer": "Updated 1.2",
+      "expectedConcepts": [
+        "Concept 1.2"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_aarshiv_1793749708429",
+    "createdBy": "prof_sharma_1793749708429",
+    "createdAt": 1793749709826,
+    "updatedAt": 1793749709827
+  },
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  }
+}

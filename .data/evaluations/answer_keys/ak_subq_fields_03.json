@@ -1,0 +1,65 @@
+{
+  "id": "ak_subq_fields_03",
+  "examId": "exam_subq_03",
+  "title": "Subquestion Fields Exam",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "approved",
+  "totalMaxMarks": 10,
+  "questions": [
+    {
+      "questionId": "1.1",
+      "subquestionId": "1",
+      "maxMarks": 5,
+      "referenceAnswer": "Answer 1.1",
+      "expectedConcepts": [
+        "Concept 1"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    },
+    {
+      "questionId": "1.2",
+      "subquestionId": "2",
+      "maxMarks": 5,
+      "referenceAnswer": "Answer 1.2",
+      "expectedConcepts": [
+        "Concept 2"
+      ],
+      "acceptableAlternatives": [],
+      "markingCriteria": [
+        "5 marks"
+      ]
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_aarshiv_1793749708429",
+    "createdBy": "prof_sharma_1793749708429",
+    "createdAt": 1793749709825,
+    "updatedAt": 1793749709826,
+    "approvedAt": 1793749709826,
+    "approvedBy": "prof_sharma_1793749708429"
+  },
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  }
+}

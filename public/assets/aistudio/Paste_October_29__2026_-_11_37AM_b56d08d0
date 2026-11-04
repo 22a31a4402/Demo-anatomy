@@ -1,0 +1,561 @@
+# NextGen Eval — Production Hardening, JSON-First Pipeline & Cost Optimisation
+
+## ROLE
+
+Act as a senior AI infrastructure engineer, backend architect, LLM evaluation specialist, and production reliability engineer.
+
+You are working on my existing application, **NextGen Eval by Aarshiv AI**, developed specifically for Anatomy Guru, a medical coaching institute. The system evaluates students' handwritten answer scripts against question papers, answer keys and marking schemes using Gemini.
+
+Your task is to audit, improve and optimise the existing implementation while preserving the current grading quality and user experience.
+
+Do not rebuild the application from scratch. First understand the existing architecture, trace the actual execution paths, and modify the code incrementally.
+
+## BUSINESS OBJECTIVE
+
+The current reported operating cost is approximately ₹9–₹14 per student evaluation for scripts containing around 40–50 pages. This figure is reported by the client and has not yet been independently verified against Gemini API usage data.
+
+My engineering target is to reduce the total variable API cost towards ₹4–₹5 or less per completed student evaluation without materially degrading grading quality.
+
+The system must support a commercial model in which each client owns its own Google Cloud project, Gemini API key and API billing account. Aarshiv AI charges separately for development, deployment, handover and optional maintenance.
+
+**Important constraints:**
+- I currently do not have a Gemini API key for running live cost experiments.
+- Do not fabricate API usage, costs, accuracy scores, benchmark results or savings.
+- Implement offline tests, instrumentation, mock providers and a real-benchmark harness so the project can be developed and tested without an API key.
+- Clearly distinguish simulated estimates from real Gemini measurements.
+- When an API key eventually becomes available, enable a controlled real-model benchmark without requiring an architectural rewrite.
+
+# PHASE 0 — REPOSITORY AUDIT AND BASELINE
+
+Before editing anything:
+
+1. Inspect the entire repository, including the frontend, backend, Gemini service, document processing, batch processing, caching, queueing, reporting, configuration, deployment and tests.
+2. Identify the actual production entry points and trace the complete path from PDF upload to final evaluation report.
+3. Determine which backend implementation is authoritative. The repository contains TypeScript and Python components; establish whether both are active or one is legacy. Do not maintain two inconsistent production grading implementations.
+4. Identify the exact Gemini models, prompts, retry policies, fallbacks, document payloads and response schemas currently used.
+5. Identify duplicate extraction, repeated reference documents, redundant PDF transmission, excessive output tokens and unnecessary Gemini calls.
+6. Inspect all tests and identify which ones use mocks, synthetic inputs or hard-coded cost formulas.
+7. Inspect the deployment configuration to understand how API keys, uploaded files, job state, logs and generated reports are stored.
+
+Create `docs/OPTIMIZATION_AUDIT.md` containing:
+
+- Current architecture and actual execution flow.
+- Current Gemini call sites and their purposes.
+- Every identified cost-saving opportunity.
+- Security, correctness and reliability issues.
+- Existing tests and missing test coverage.
+- A baseline measurement plan.
+- A phased implementation checklist.
+
+Do not claim that an issue exists in the active runtime merely because a file contains it; trace its usage first.
+
+**Phase 0 acceptance criteria:** The audit is committed, the existing test suite has been run, and the current working behaviour and known defects are documented. Do not begin a large rewrite before completing this audit.
+
+# PHASE 1 — SECURITY, GRADING INTEGRITY AND RELIABILITY
+
+Fix critical correctness and security problems before optimising model usage.
+
+## 1. API security
+
+- Remove unrestricted CORS and configure explicit allowed origins.
+- Add authentication and authorisation to evaluation, job, result, retry and metrics endpoints.
+- Enforce ownership and tenant isolation for every job, uploaded document, cache entry and report.
+- Validate upload types, file sizes, request schemas and supported evaluation formats.
+- Add rate limits, concurrency limits and request-size limits.
+- Keep Gemini credentials exclusively on the server.
+- Never expose API keys in frontend bundles, client responses, logs or committed files.
+- Use environment variables or a secret manager for credentials.
+- Avoid logging student answers, full prompts, PDFs or sensitive personal data unless strictly necessary.
+
+Do not assume CORS alone provides API security.
+
+## 2. Grading integrity
+
+Inspect `server/evaluator.ts` and all alternative grading implementations.
+
+- Remove any fallback that creates a successful or perfect grade when Gemini fails or no API key is configured.
+- If a model response is missing, malformed or invalid, return a failed, retryable or human-review state as appropriate.
+- Do not replace missing maximum marks with an arbitrary default.
+- Do not silently clamp an invalid score and treat it as a valid evaluation.
+- Validate every question ID, subpart, maximum mark, awarded mark, section total and overall total.
+- Ensure marks are numeric, finite and within the rubric's valid range.
+- Detect missing questions, duplicated question IDs, unrecognised subparts and missing feedback.
+- Preserve legitimate partial credit.
+- Never assume that valid JSON means academically correct grading.
+
+## 3. Retry and timeout behaviour
+
+- Apply an explicit timeout to every Gemini request.
+- Add a bounded overall deadline for each evaluation.
+- Use exponential backoff with jitter for retryable errors such as rate limits and transient server failures.
+- Do not retry non-retryable errors indefinitely.
+- Cap retry attempts and total model calls per evaluation.
+- Prevent retries from accidentally duplicating completed work.
+- Record every attempt, its outcome, model and usage metadata.
+- Treat malformed outputs separately from transient API failures.
+- Make the final job state accurate and observable.
+
+## 4. Durable jobs
+
+- Inspect the current queue and persistence implementation.
+- Do not rely on instance-local JSON files as the sole source of truth for production jobs.
+- Introduce durable shared storage and a persistent queue if required by the deployment architecture.
+- Ensure that jobs survive restarts and that interrupted work can be recovered safely.
+- Make job processing idempotent.
+- Prevent concurrent workers from grading the same job unnecessarily.
+- Ensure partial results cannot be mistaken for a completed report.
+
+## 5. Data retention
+
+- Establish retention and deletion policies for original scripts, extracted JSON, cache entries, logs and reports.
+- Isolate data between institutes.
+- Avoid keeping student documents indefinitely merely because they are cached.
+- Document where files and reports are stored and who can access them.
+
+**Acceptance criteria:** Critical security and grading-integrity issues are fixed; tests cover failure cases; no failed API call can generate a fabricated successful grade.
+
+# PHASE 2 — IMPLEMENT COMPLETE COST AND USAGE INSTRUMENTATION
+
+This phase must work without a Gemini API key.
+
+Create a central instrumentation layer for all Gemini requests instead of scattering cost calculations throughout the application.
+
+For each model call, capture the available fields:
+
+- Evaluation ID and job ID.
+- Tenant ID or a safe tenant identifier.
+- Pipeline stage: reference extraction, student extraction, grading, correction or escalation.
+- Model name and model version where available.
+- Input token count.
+- Output token count.
+- Cached input token count, where applicable.
+- Modality or usage details where available.
+- Request duration.
+- Attempt number.
+- Success, failure or timeout status.
+- Retry and fallback information.
+- Estimated input and output costs.
+- Pricing configuration version.
+- Whether usage values are actual API metadata, estimated or unavailable.
+
+Use Gemini's actual usage metadata when provided. Do not infer actual token counts from character counts when real metadata is available.
+
+## Pricing calculations
+
+- Store model pricing in versioned configuration, not hard-coded assumptions scattered across the code.
+- Make the pricing configuration explicit about model, billing tier, input modality, output tokens, cached tokens and applicable discounts.
+- Support currency conversion to INR using a configurable exchange rate.
+- Distinguish API cost from hosting, storage, infrastructure and other operational costs.
+- Keep API costs and total operating costs separate.
+- Avoid double-counting input tokens or retries.
+- Record the pricing configuration used at the time of each request.
+
+If a pricing rate or token count is unavailable, return an unknown or incomplete estimate instead of fabricating a precise cost.
+
+## Per-evaluation aggregation
+
+Provide a reliable calculation for:
+
+- Total calls per evaluation.
+- Total input and output tokens.
+- Extraction cost.
+- Grading cost.
+- Retry and fallback cost.
+- Total API cost per completed evaluation.
+- Average and median cost.
+- P90 or P95 cost where enough samples exist.
+- Failure rate and retry rate.
+- Cost per question and cost per page, where meaningful.
+
+Create an internal usage report or dashboard that clearly distinguishes:
+
+1. Real usage from Gemini metadata.
+2. Estimated cost calculated from real usage and a pricing table.
+3. Simulated usage generated by mocks.
+4. Actual billed charges, if independently imported or reconciled.
+
+Never label estimated API cost as the client's confirmed Google Cloud bill.
+
+**Acceptance criteria:** Unit tests verify usage aggregation, retry accounting, pricing calculations, missing metadata, model changes and currency conversion. The system remains usable in offline mode.
+
+# PHASE 3 — IMPLEMENT REUSABLE EXAM REFERENCE JSON
+
+Implement a dedicated exam preparation workflow.
+
+The question paper, answer key and marking scheme are shared by all students taking the same exam. They should not be fully re-extracted for every student.
+
+## Exam preparation
+
+Create a validated, versioned exam reference object containing:
+
+- Exam ID and reference version.
+- Subject and exam metadata.
+- Question IDs and subquestion IDs.
+- Maximum marks for each question and subpart.
+- Question text and relevant instructions.
+- Expected answer concepts.
+- Accepted equivalent terminology.
+- Marking criteria and partial-credit rules.
+- Required diagrams, labels or visual evidence where relevant.
+- Reference page numbers and source document hashes.
+- Extraction confidence and review status.
+
+Use a structured schema with explicit validation.
+
+Do not assume that all medical exams follow a fixed question numbering convention.
+
+## Reference reuse
+
+- Extract the reference documents once when the exam is created or updated.
+- Save the validated JSON in durable storage.
+- Reuse the same reference version for all students in that exam.
+- Re-extract only when the source documents or relevant extraction configuration change.
+- Allow an authorised reviewer to correct extraction mistakes.
+- Preserve version history so that earlier evaluations can be traced to the rubric used at the time.
+
+Avoid sending the entire question paper, answer key and marking scheme repeatedly when only a subset of the reference is required.
+
+## Cache identity
+
+Use SHA-256 over the full file bytes and a canonical representation of the validated reference data.
+
+Include relevant extraction model, schema version and configuration in the cache key.
+
+Do not hash only the beginning or end of a PDF, or use only its prefix and file length.
+
+**Acceptance criteria:** Tests prove that two students taking the same exam reuse the validated reference data, while a changed question paper, answer key or rubric creates a new reference version.
+
+# PHASE 4 — IMPLEMENT THE STUDENT JSON EXTRACTION PIPELINE
+
+Separate reading the student's script from grading the student's answers.
+
+The pipeline should have the following stages:
+
+1. Upload and validate the original PDF.
+2. Extract text or handwriting using the existing supported document-processing path.
+3. Use OCR or Gemini vision where appropriate.
+4. Map responses to question and subquestion IDs.
+5. Store the extracted answers in a validated student-answer JSON object.
+6. Record page references and relevant visual evidence.
+7. Flag uncertain, missing or ambiguous responses.
+8. Pass the structured answers to the evaluation stage.
+
+## Required student-answer structure
+
+Design a schema containing fields conceptually equivalent to:
+
+- Student script ID.
+- Exam reference version.
+- Question ID and subquestion ID.
+- Extracted answer text.
+- Source page numbers.
+- Relevant image or diagram references.
+- Extraction confidence or review status.
+- Missing, unreadable or ambiguous answer flags.
+- Extraction model and schema version.
+
+Adapt this structure to the actual application rather than introducing incompatible duplicate schemas.
+
+## Visual fidelity
+
+Medical answer sheets may include labelled anatomy drawings, flowcharts, tables, equations and handwriting that ordinary OCR cannot capture reliably.
+
+Therefore:
+
+- Do not convert every PDF to text-only content if doing so loses grading evidence.
+- Retain the relevant page image or crop for answers requiring visual interpretation.
+- Avoid sending full-resolution images for every question when a suitable crop preserves the evidence.
+- Do not discard labels, arrows, diagram relationships or spatial information.
+- Flag low-confidence extraction instead of inventing missing words.
+- Keep an auditable mapping from each extracted answer to its original page.
+
+## Reduce redundant processing
+
+- Avoid sending the same student PDF multiple times within the same evaluation unless a retry or targeted review requires it.
+- Reuse successfully extracted student JSON when only grading configuration or a recoverable downstream step changes, provided the extraction version remains compatible.
+- Avoid rerunning extraction because a grading request failed.
+- Do not reuse extracted content across different students or documents.
+
+**Acceptance criteria:** Offline tests cover multi-page scripts, missing answers, multiple subparts, ambiguous numbering, low-confidence handwriting, diagrams and malformed extraction output.
+
+# PHASE 5 — COST-EFFICIENT QUESTION-WISE GEMINI EVALUATION
+
+Implement an evaluator that consumes validated reference JSON and validated student-answer JSON.
+
+Do not force the entire 40–50-page PDF, complete question paper, answer key and every answer into every grading request.
+
+## Context construction
+
+For each grading request, include only:
+
+- Relevant question text.
+- Relevant expected answer or accepted concepts.
+- Matching marking rubric.
+- Maximum marks.
+- Student's extracted answer.
+- Relevant diagram or page crop, if necessary.
+- A concise, stable grading instruction.
+
+Use question-group evaluation rather than automatically making one call per question. Test sensible chunk sizes and measure the trade-off between token cost, latency and grading quality.
+
+Keep a consistent question and subquestion identity throughout extraction, grading and reporting.
+
+## Model selection
+
+- Preserve the currently deployed model as the baseline.
+- Introduce a configurable model setting.
+- Test a lower-cost Gemini model for extraction and grading separately.
+- Do not assume the cheapest model is suitable for both stages.
+- Use schema-constrained structured output when supported by the selected model and API.
+- Keep the output schema concise without removing fields needed for auditing or reporting.
+- Limit unnecessary verbose reasoning and repetitive feedback.
+- Do not use a cheaper model in production merely because its output parses successfully.
+
+## Selective escalation
+
+Define explicit escalation criteria, such as:
+
+- Low extraction confidence.
+- Unreadable handwriting.
+- Missing or mismatched question mapping.
+- Diagram-dependent grading.
+- Invalid structured output.
+- Ambiguous partial credit.
+- Large disagreement between a first-pass grade and a targeted verification pass, where such a check is justified.
+
+Send only the affected answer and relevant context to the stronger model rather than resubmitting the whole script.
+
+Escalation must be bounded and included in usage accounting.
+
+Do not automatically double-grade every answer unless benchmarking shows that the additional expense is necessary.
+
+## Output validation
+
+Every result must contain the fields needed by the existing report generator.
+
+Validate awarded marks, maximum marks, feedback, question identity, totals and missing-answer status in application code.
+
+Never silently repair a malformed grade into a successful grade.
+
+**Acceptance criteria:** The evaluator can be tested with a mock Gemini provider, supports model configuration, produces valid structured reports, and exposes the cost and usage of each grading stage.
+
+# PHASE 6 — FIX AND STRENGTHEN CACHING
+
+Audit the existing cache implementation and retain only caching behaviour that is safe and useful.
+
+Use content-addressed cache keys built from the full relevant inputs.
+
+For extraction, consider:
+
+- Full source document hash.
+- Extraction model and configuration.
+- Prompt and schema version.
+- Relevant preprocessing settings.
+
+For evaluation, include:
+
+- Student-answer content and its version.
+- Exam reference version.
+- Rubric and maximum marks.
+- Evaluation prompt and schema version.
+- Model and relevant model configuration.
+- Relevant visual evidence hashes.
+- Any other setting that can change the grade.
+
+Do not reuse an old report merely because the PDF has the same file length or a matching prefix.
+
+Additional requirements:
+
+- Scope cache entries by tenant.
+- Store cache metadata and creation time.
+- Define expiry and deletion rules.
+- Do not treat failures or incomplete responses as successful cached evaluations.
+- Prevent concurrent duplicate cache misses from triggering unnecessary identical calls.
+- Test that changing a rubric, answer, model or prompt version invalidates the relevant evaluation cache.
+
+Measure cache-hit rates and actual avoided calls. Do not claim savings from a cache hit if no comparable API call would otherwise have been made.
+
+# PHASE 7 — OFFLINE TESTING AND REAL BENCHMARK INFRASTRUCTURE
+
+I currently have no Gemini API key, so this phase must work without live model calls.
+
+## Offline mode
+
+Create a mock Gemini provider that can return deterministic responses for:
+
+- Successful extraction.
+- Successful grading.
+- Malformed JSON.
+- Missing usage metadata.
+- Timeout.
+- Rate limiting.
+- Transient server error.
+- Invalid API configuration.
+- Retry followed by success.
+- Exhausted retries.
+- Model fallback.
+- Low-confidence extraction.
+- Human-review requirements.
+
+Mocks must not be presented as real Gemini performance.
+
+Keep synthetic performance tests separate from real-model benchmarks.
+
+## Benchmark dataset
+
+Create a benchmark harness that accepts a set of representative student scripts and corresponding faculty-awarded marks.
+
+Support anonymised test data and avoid committing actual student answer sheets or personal data into the repository.
+
+The harness should run two configurations on the same input set:
+
+A. Current baseline pipeline.
+
+B. Optimised JSON-first pipeline.
+
+Compare:
+
+- Cost per completed evaluation.
+- Input and output tokens.
+- Extraction and grading cost separately.
+- Mean, median and P95 cost where sample size permits.
+- Processing time.
+- Failure and retry rate.
+- Question-level score differences.
+- Total-score differences.
+- Missing or incorrectly mapped answers.
+- Human-review and escalation rate.
+- Agreement with faculty marks.
+
+Record the exact dataset, configuration, prompt version, model and date for every benchmark run.
+
+## Real Gemini mode
+
+When a valid API key is available:
+
+- Enable real API calls through the same provider interface.
+- Use actual response usage metadata.
+- Capture every call, retry and escalation.
+- Make a small controlled test run before running a larger dataset.
+- Verify billing and pricing assumptions against the applicable Google documentation and available account data.
+- Never put a real API key in test fixtures, benchmark output or logs.
+
+If the API key is unavailable, report real API cost and real model accuracy as **not measured**. Do not substitute estimates for actual results.
+
+# PHASE 8 — COMPARE MODELS AND OPTIMISATIONS
+
+Only after the instrumentation and benchmark harness are reliable, run controlled comparisons.
+
+Compare these configurations independently:
+
+1. Current production pipeline.
+2. Current model with reference reuse and reduced redundant context.
+3. JSON-first extraction with the current grading model.
+4. JSON-first extraction with a lower-cost Gemini grading model.
+5. JSON-first extraction with question-group grading and compact prompts.
+6. JSON-first extraction with selective escalation.
+7. The best combined configuration.
+
+Change one major factor at a time initially so that its effect can be measured.
+
+For each configuration, report actual cost when real API data exists. Otherwise, report only the offline test results and identify real cost as unmeasured.
+
+Do not claim that JSON, batching, caching or a cheaper model necessarily lowers total cost; measure each change. Extraction may still dominate the total expense for a 40–50-page handwritten script.
+
+## Grading-quality acceptance criteria
+
+Use faculty-awarded marks as the reference.
+
+Before running the benchmark, define acceptable thresholds with the domain expert. Do not invent an accuracy threshold after seeing the results.
+
+At minimum, compare:
+
+- Absolute score difference.
+- Question-level agreement.
+- Partial-credit consistency.
+- Correctness of equivalent medical terminology.
+- Diagram and label evaluation.
+- Handling of missing and unreadable answers.
+- Cases where the optimised model awards excessive or insufficient marks.
+
+Investigate material regressions individually. A lower average cost is not an acceptable trade-off if it causes systematic under-grading or over-grading.
+
+Do not deploy an optimised configuration by default until the quality criteria are met.
+
+# PHASE 9 — DEPLOYMENT AND HANDOVER READINESS
+
+Prepare the application for a client-owned API and billing account.
+
+- Document how the client creates and configures the required Google Cloud project and API key.
+- Store credentials securely on the server.
+- Provide environment-variable examples without real secrets.
+- Validate missing or invalid credentials clearly.
+- Explain which endpoints, models and API permissions are required.
+- Document rate limits, budget controls and monitoring.
+- Provide an operator guide for failed jobs, retries and manual review.
+- Document backup, retention, deletion and recovery procedures.
+- Provide a deployment checklist and rollback procedure.
+- Keep development, benchmark and production configuration separate.
+- Do not require the developer's personal API key for normal operation.
+
+Ensure that usage reporting clearly identifies estimated API costs versus actual billed expenditure.
+
+# PHASE 10 — DOCUMENTATION AND FINAL REPORT
+
+Update the relevant documentation and produce:
+
+1. `docs/OPTIMIZATION_AUDIT.md` — findings and original architecture.
+2. `docs/PIPELINE_ARCHITECTURE.md` — revised extraction, grading and reporting flow.
+3. `docs/COST_MEASUREMENT.md` — usage fields, pricing assumptions and calculation methodology.
+4. `docs/BENCHMARKING.md` — offline tests and real API benchmark instructions.
+5. `docs/CLIENT_HANDOVER.md` — client-owned API key, deployment, monitoring and maintenance.
+6. A list of files changed and why.
+7. Test commands and actual test results.
+8. A list of remaining risks and unimplemented features.
+
+Do not report completion of a phase until its acceptance criteria are met.
+
+# GLOBAL IMPLEMENTATION RULES
+
+- Preserve the current UI and existing working behaviour unless a change is required for correctness, security or cost optimisation.
+- Use the repository's existing language, framework, conventions and test tooling.
+- Avoid unnecessary dependencies and large architectural rewrites.
+- Keep the changes small and reviewable.
+- Add regression tests before changing grading-critical behaviour.
+- Do not remove visual inputs required for handwriting or diagram evaluation just to reduce tokens.
+- Do not hard-code fabricated costs or accuracy metrics.
+- Do not make mock providers the default production provider.
+- Do not silently return fallback grades when the model fails.
+- Do not log sensitive student documents or API keys.
+- Do not claim a production benchmark has passed merely because unit tests pass.
+- Do not change the grading prompt, model or chunking strategy without recording the version and evaluating its effect.
+- If a requirement is ambiguous, inspect the existing code and choose the least disruptive safe implementation; document any assumptions.
+
+## EXECUTION STRATEGY
+
+Implement in this exact order:
+
+1. Phase 0: audit and baseline.
+2. Phase 1: security, grading integrity and reliability.
+3. Phase 2: usage and cost instrumentation.
+4. Phase 3: reusable exam reference JSON.
+5. Phase 4: student-answer extraction.
+6. Phase 5: question-wise grading.
+7. Phase 6: safe caching.
+8. Phase 7: offline tests and benchmark harness.
+9. Phase 8: model and pipeline comparisons.
+10. Phase 9: deployment and handover.
+11. Phase 10: documentation and final report.
+
+After each phase:
+
+- Run relevant tests.
+- Fix regressions before proceeding.
+- Summarise changed files and key design decisions.
+- Report passing and failing tests accurately.
+- State whether real Gemini cost and grading quality have been measured.
+- Identify any remaining blockers.
+
+If the coding environment supports separate branches or commits, keep the changes logically separated so that the current working application can be restored easily.
+
+**Start with Phase 0 only. Audit the actual repository and produce the findings before implementing changes. Do not attempt to complete all phases in a single unreviewed rewrite.**

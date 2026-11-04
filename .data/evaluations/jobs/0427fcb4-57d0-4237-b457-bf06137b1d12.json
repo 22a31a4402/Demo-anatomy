@@ -1,0 +1,98 @@
+{
+  "id": "0427fcb4-57d0-4237-b457-bf06137b1d12",
+  "correlationId": "eval_1793749709822_1203f8a9",
+  "status": "completed",
+  "progressPercent": 100,
+  "currentStepMessage": "Evaluation complete and verified",
+  "mode": "without-manual",
+  "studentName": "Legacy Student",
+  "testTitle": "Academic Assessment",
+  "institutionId": "inst_aarshiv_1793749708429",
+  "createdBy": "prof_sharma_1793749708429",
+  "creatorRole": "instructor",
+  "createdAt": 1793749709822,
+  "updatedAt": 1793749718531,
+  "metrics": {
+    "correlationId": "eval_1793749709822_1203f8a9",
+    "startTime": 1793749718527,
+    "cacheHit": true,
+    "retriesCount": 0,
+    "preprocessingLatencyMs": 1,
+    "modelUsed": "gemini-3.8-flash",
+    "inputTokens": 2000,
+    "outputTokens": 300,
+    "cachedInputTokens": 0,
+    "estimatedCostUsd": 0,
+    "estimatedCostInr": 0,
+    "pricingVersion": "pricing_v2.1_2026_05",
+    "usageCompleteness": "COMPLETE",
+    "usageSource": "ACTUAL_API",
+    "geminiLatencyMs": 0,
+    "validationLatencyMs": 2,
+    "totalLatencyMs": 1,
+    "endTime": 1793749718528
+  },
+  "inputPayload": {
+    "sourceDoc": {
+      "name": "Legacy_Student.pdf",
+      "text": "Legacy script"
+    },
+    "questionPaper": {
+      "name": "QP_Legacy.pdf",
+      "text": "Q1. Explain cell (10 marks)."
+    },
+    "answerKey": {
+      "name": "AK_Legacy.pdf",
+      "text": "Q1. Cell is basic structural unit (10 marks)."
+    }
+  },
+  "report": {
+    "studentName": "Legacy Student",
+    "testTitle": "Legacy Assessment",
+    "testTopics": "Biology",
+    "testDate": "2026-10-29",
+    "totalScore": 10,
+    "maxScore": 10,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 10,
+        "maxMarks": 10,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Correct."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Passed."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Accurate."
+      ],
+      "completenessOfAnswers": [
+        "Complete."
+      ],
+      "presentationDiagrams": [
+        "Presentation and structure reviewed."
+      ],
+      "investigations": [
+        "Methodology steps reviewed."
+      ],
+      "attemptingQuestions": [
+        "Attempted."
+      ],
+      "actionPoints": [
+        "Good."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "0427fcb4-57d0-4237-b457-bf06137b1d12",
+    "timestamp": 1793749718528
+  }
+}

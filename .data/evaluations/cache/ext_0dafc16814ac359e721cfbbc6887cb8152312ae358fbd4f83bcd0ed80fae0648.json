@@ -1,0 +1,45 @@
+{
+  "studentName": "Rahul Kumar",
+  "examTitle": "Anatomy End-Term Assessment",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "The median nerve arises from lateral and medial cords of brachial plexus. It runs down the arm into the cubital fossa...",
+      "diagramDescription": "Hand-drawn schematic of cubital fossa showing relations of biceps tendon, brachial artery, and median nerve from lateral to medial.",
+      "formulas": [
+        "Root value: C5, C6, C7, C8, T1"
+      ],
+      "pageReferences": [
+        1,
+        2
+      ],
+      "isAttempted": true,
+      "confidence": 0.96,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "JVBERi0xLjQKJ_STUDENT_SCRIPT_MOCK_BASE64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    },
+    {
+      "questionId": "2.a",
+      "subquestionId": "a",
+      "studentAnswerText": "Carpal bones: Scaphoid, Lunate, Triquetrum, Pisiform, Trapezium, Trapezoid, Capitate, Hamate.",
+      "isAttempted": true,
+      "confidence": 0.99,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "JVBERi0xLjQKJ_STUDENT_SCRIPT_MOCK_BASE64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    },
+    {
+      "questionId": "2.b",
+      "subquestionId": "b",
+      "studentAnswerText": "[Not Attempted]",
+      "isAttempted": false,
+      "confidence": 1
+    }
+  ],
+  "warnings": [
+    "Question 2.b not identified in student submission (marked unattempted)."
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749709830
+}

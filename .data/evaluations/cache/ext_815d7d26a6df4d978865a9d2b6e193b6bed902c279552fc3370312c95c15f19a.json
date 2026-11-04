@@ -1,0 +1,33 @@
+{
+  "studentName": "Marie Curie",
+  "examTitle": "Organic & Physical Chemistry Mid-Term",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "C2H5OH + 3 O2 -> 2 CO2 + 3 H2O",
+      "formulas": [
+        "C2H5OH + 3O2 -> 2CO2 + 3H2O"
+      ],
+      "isAttempted": true,
+      "confidence": 0.99,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "CHEM_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    },
+    {
+      "questionId": "2",
+      "studentAnswerText": "Hydroxide ion attacks carbon from the side opposite to chlorine. A transition state forms where both OH and Cl are partially bonded. Cl- leaves, causing complete inversion of configuration (Walden inversion).",
+      "diagramDescription": "Chemical structure drawing of CH3Cl with curved arrow from :OH- to central carbon; bracketed transition state with partial bonds dashed to HO and Cl and negative charge; final product with inverted tetrahedral geometry.",
+      "formulas": [
+        "[HO...CH3...Cl]^-"
+      ],
+      "isAttempted": true,
+      "confidence": 0.97,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "CHEM_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    }
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749709847
+}

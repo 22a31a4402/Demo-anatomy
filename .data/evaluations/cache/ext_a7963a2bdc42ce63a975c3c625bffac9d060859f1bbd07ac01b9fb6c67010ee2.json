@@ -1,0 +1,23 @@
+{
+  "studentName": "Dr. Rahul Sharma",
+  "examTitle": "Gross Anatomy Paper 1",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "The Brachial Plexus is formed by roots C5-T1. They join into upper, middle, and lower trunks, divide into anterior and posterior divisions, and form lateral, medial, and posterior cords surrounding the axillary artery. Terminal branches include median, ulnar, radial, and musculocutaneous nerves. Erb-Duchenne palsy affects C5-C6 with policeman tip deformity.",
+      "diagramDescription": "Neat hand-drawn diagram illustrating roots C5-T1, upper/middle/lower trunks, cords around axillary artery, and terminal nerves with labeled roots.",
+      "isAttempted": true,
+      "confidence": 0.98,
+      "flaggedUncertain": false
+    },
+    {
+      "questionId": "2",
+      "studentAnswerText": "The thyroid gland blood supply is via the superior thyroid artery (branch of external carotid artery) related to the external laryngeal nerve, and inferior thyroid artery (branch of thyrocervical trunk) closely related to the recurrent laryngeal nerve. Venous drainage occurs via superior and middle thyroid veins into the internal jugular vein, and inferior thyroid vein into the brachiocephalic vein.",
+      "isAttempted": true,
+      "confidence": 0.98,
+      "flaggedUncertain": false
+    }
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749707051
+}

@@ -1,0 +1,97 @@
+{
+  "id": "ak_1793749709836_ea62e19e6104",
+  "examId": "exam_1793749709837",
+  "title": "Calculus Advanced (Revised)",
+  "subject": "Mathematics",
+  "grade": "B.Sc / Engineering Year 1",
+  "sourceMode": "ai_generated",
+  "version": 2,
+  "status": "draft",
+  "printedMaxMarks": 20,
+  "totalMaxMarks": 20,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 20,
+    "calculatedTotalMarks": 20,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 20
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 20
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Evaluate the definite integral \\int_{0}^{\\pi/2} \\sin(x)\\cos(x) dx.",
+      "maxMarks": 10,
+      "referenceAnswer": "Let u = sin(x), du = cos(x)dx. When x=0, u=0; x=pi/2, u=1. \\int_0^1 u du = [u^2/2]_0^1 = 1/2.",
+      "expectedConcepts": [
+        "Substitution method or double angle identity",
+        "Correct change of limits or antiderivative",
+        "Final answer = 1/2"
+      ],
+      "acceptableAlternatives": [
+        "Double-angle identity: \\int (1/2)\\sin(2x)dx = [- (1/4)\\cos(2x)]_0^{\\pi/2} = 1/2"
+      ],
+      "markingCriteria": [
+        "4 marks for valid substitution/identity",
+        "3 marks for correct limits and antiderivative",
+        "3 marks for exact result 1/2"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.98
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Prove that the area of a right-angled triangle with base b and height h is (1/2)bh. Draw labelled diagram.",
+      "maxMarks": 10,
+      "referenceAnswer": "Complete the rectangle of sides b and h. Diagonal splits rectangle of area bh into two congruent right triangles. Area = (1/2)bh.",
+      "expectedConcepts": [
+        "Rectangle completion or integral derivation",
+        "Congruence argument",
+        "Labelled diagram with base b, height h, hypotenuse"
+      ],
+      "acceptableAlternatives": [
+        "Coordinate geometry proof placing vertices at (0,0), (b,0), (0,h)"
+      ],
+      "markingCriteria": [
+        "5 marks for geometric proof",
+        "5 marks for correct labelled diagram"
+      ],
+      "diagramReferences": [
+        "Right-angled coordinate geometry triangle with base b, height h, right angle symbol"
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_math_01",
+    "createdBy": "prof_euler",
+    "createdAt": 1793749709837,
+    "updatedAt": 1793749709856,
+    "sourceDocName": "QP_Calculus.pdf"
+  },
+  "questionPaperFingerprint": "5cdb68ef1be7458fda26bcfecc85034e0e46194b58f6ee59b0c26331fb6e6767",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_Calculus.pdf",
+    "text": "Evaluate the definite integral \\int_{0}^{1} \\frac{x^2}{\\sqrt{1-x^2}} dx and determine if \\sum_{n=1}^{\\infty} a_n converges.",
+    "base64": "B64_MATH_EQUATIONS",
+    "mimeType": "application/pdf"
+  }
+}

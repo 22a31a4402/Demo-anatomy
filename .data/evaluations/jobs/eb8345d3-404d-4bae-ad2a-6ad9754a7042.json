@@ -1,0 +1,357 @@
+{
+  "id": "eb8345d3-404d-4bae-ad2a-6ad9754a7042",
+  "correlationId": "eval_1793749708440_02493894",
+  "status": "completed",
+  "progressPercent": 100,
+  "currentStepMessage": "Evaluation complete and verified",
+  "mode": "without-manual",
+  "studentName": "Student Approved Key Test",
+  "testTitle": "Academic Assessment",
+  "institutionId": "inst_aarshiv_1793749708429",
+  "createdBy": "prof_sharma_1793749708429",
+  "creatorRole": "instructor",
+  "createdAt": 1793749708440,
+  "updatedAt": 1793749718568,
+  "answerKeyId": "ak_1793749708430_45db9e3537e9",
+  "answerKeyVersion": 1,
+  "answerKeySourceMode": "ai_generated",
+  "canonicalAnswerKey": {
+    "id": "ak_1793749708430_45db9e3537e9",
+    "examId": "exam_1793749708436",
+    "title": "Anatomy End-Term Assessment",
+    "subject": "Anatomy",
+    "grade": "MBBS Year 1",
+    "sourceMode": "ai_generated",
+    "version": 1,
+    "status": "approved",
+    "printedMaxMarks": 20,
+    "totalMaxMarks": 20,
+    "marksValidation": {
+      "hasDiscrepancy": false,
+      "printedMaxMarks": 20,
+      "calculatedTotalMarks": 20,
+      "difference": 0,
+      "discrepancyMessages": [],
+      "offendingQuestions": [],
+      "sectionTotals": {
+        "General": 20
+      },
+      "sections": [
+        {
+          "sectionName": "General",
+          "questionCount": 3,
+          "calculatedTotalMarks": 20
+        }
+      ],
+      "ambiguousChoices": [],
+      "hasAmbiguousChoices": false,
+      "selectionRules": []
+    },
+    "selectionRules": [],
+    "questions": [
+      {
+        "questionId": "1",
+        "isAlternative": false,
+        "isParentHeader": false,
+        "questionText": "Describe the course and branches of the Median Nerve in the forearm.",
+        "maxMarks": 10,
+        "referenceAnswer": "The median nerve enters the forearm between the two heads of pronator teres...",
+        "expectedConcepts": [
+          "Pronator teres relation",
+          "Anterior interosseous nerve branch",
+          "Motor innervation to flexors"
+        ],
+        "acceptableAlternatives": [
+          "Can mention C5-T1 root values alternatively"
+        ],
+        "markingCriteria": [
+          "3 marks for course",
+          "4 marks for muscular branches",
+          "3 marks for clinical correlation"
+        ],
+        "diagramReferences": [
+          "Forearm flexor compartment diagram"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "questionId": "2.a",
+        "subquestionId": "a",
+        "isAlternative": false,
+        "isParentHeader": false,
+        "questionText": "Enumerate the carpal bones.",
+        "maxMarks": 5,
+        "referenceAnswer": "Proximal row: Scaphoid, Lunate, Triquetrum, Pisiform. Distal row: Trapezium, Trapezoid, Capitate, Hamate.",
+        "expectedConcepts": [
+          "Proximal row 4 bones",
+          "Distal row 4 bones"
+        ],
+        "acceptableAlternatives": [
+          "Mnemonic: She Looks Too Pretty Try To Catch Her"
+        ],
+        "markingCriteria": [
+          "2.5 marks for proximal row",
+          "2.5 marks for distal row"
+        ],
+        "diagramReferences": [],
+        "confidence": 0.98
+      },
+      {
+        "questionId": "2.b",
+        "subquestionId": "b",
+        "isAlternative": false,
+        "isParentHeader": false,
+        "questionText": "Explain the anatomical basis of Carpal Tunnel Syndrome.",
+        "maxMarks": 5,
+        "referenceAnswer": "Compression of median nerve beneath the flexor retinaculum...",
+        "expectedConcepts": [
+          "Flexor retinaculum boundaries",
+          "Median nerve compression",
+          "Ape thumb deformity / thenar wasting"
+        ],
+        "acceptableAlternatives": [
+          "Can mention sensory loss in lateral 3.5 digits"
+        ],
+        "markingCriteria": [
+          "2 marks for boundaries",
+          "3 marks for symptoms and signs"
+        ],
+        "diagramReferences": [],
+        "confidence": 0.94
+      }
+    ],
+    "metadata": {
+      "institutionId": "inst_aarshiv_1793749708429",
+      "createdBy": "prof_sharma_1793749708429",
+      "createdAt": 1793749708436,
+      "updatedAt": 1793749708440,
+      "sourceDocName": "QP_Anatomy_2026.pdf",
+      "approvedAt": 1793749708440,
+      "approvedBy": "prof_sharma_1793749708429"
+    },
+    "questionPaperFingerprint": "e250a2ca1242e798caccb48f690413a84650c9e1b94ed0c42187cfce6cf26c6d",
+    "sourceQuestionPaperDoc": {
+      "name": "QP_Anatomy_2026.pdf",
+      "text": "Question 1: Describe the course and branches of the Median Nerve (10 marks). Question 2: (a) Enumerate carpal bones (5 marks). (b) Carpal tunnel syndrome (5 marks)."
+    }
+  },
+  "metrics": {
+    "correlationId": "eval_1793749708440_02493894",
+    "startTime": 1793749718567,
+    "cacheHit": true,
+    "retriesCount": 0,
+    "preprocessingLatencyMs": 0,
+    "modelUsed": "gemini-3.8-flash",
+    "inputTokens": 2000,
+    "outputTokens": 450,
+    "cachedInputTokens": 0,
+    "estimatedCostUsd": 0,
+    "estimatedCostInr": 0,
+    "pricingVersion": "pricing_v2.1_2026_05",
+    "usageCompleteness": "COMPLETE",
+    "usageSource": "ACTUAL_API",
+    "geminiLatencyMs": 0,
+    "validationLatencyMs": 2,
+    "totalLatencyMs": 1,
+    "endTime": 1793749718568
+  },
+  "inputPayload": {
+    "sourceDoc": {
+      "name": "Student_Submission_Approved.pdf",
+      "text": "Median nerve answers..."
+    },
+    "answerKeyId": "ak_1793749708430_45db9e3537e9",
+    "canonicalAnswerKey": {
+      "id": "ak_1793749708430_45db9e3537e9",
+      "examId": "exam_1793749708436",
+      "title": "Anatomy End-Term Assessment",
+      "subject": "Anatomy",
+      "grade": "MBBS Year 1",
+      "sourceMode": "ai_generated",
+      "version": 1,
+      "status": "approved",
+      "printedMaxMarks": 20,
+      "totalMaxMarks": 20,
+      "marksValidation": {
+        "hasDiscrepancy": false,
+        "printedMaxMarks": 20,
+        "calculatedTotalMarks": 20,
+        "difference": 0,
+        "discrepancyMessages": [],
+        "offendingQuestions": [],
+        "sectionTotals": {
+          "General": 20
+        },
+        "sections": [
+          {
+            "sectionName": "General",
+            "questionCount": 3,
+            "calculatedTotalMarks": 20
+          }
+        ],
+        "ambiguousChoices": [],
+        "hasAmbiguousChoices": false,
+        "selectionRules": []
+      },
+      "selectionRules": [],
+      "questions": [
+        {
+          "questionId": "1",
+          "isAlternative": false,
+          "isParentHeader": false,
+          "questionText": "Describe the course and branches of the Median Nerve in the forearm.",
+          "maxMarks": 10,
+          "referenceAnswer": "The median nerve enters the forearm between the two heads of pronator teres...",
+          "expectedConcepts": [
+            "Pronator teres relation",
+            "Anterior interosseous nerve branch",
+            "Motor innervation to flexors"
+          ],
+          "acceptableAlternatives": [
+            "Can mention C5-T1 root values alternatively"
+          ],
+          "markingCriteria": [
+            "3 marks for course",
+            "4 marks for muscular branches",
+            "3 marks for clinical correlation"
+          ],
+          "diagramReferences": [
+            "Forearm flexor compartment diagram"
+          ],
+          "confidence": 0.95
+        },
+        {
+          "questionId": "2.a",
+          "subquestionId": "a",
+          "isAlternative": false,
+          "isParentHeader": false,
+          "questionText": "Enumerate the carpal bones.",
+          "maxMarks": 5,
+          "referenceAnswer": "Proximal row: Scaphoid, Lunate, Triquetrum, Pisiform. Distal row: Trapezium, Trapezoid, Capitate, Hamate.",
+          "expectedConcepts": [
+            "Proximal row 4 bones",
+            "Distal row 4 bones"
+          ],
+          "acceptableAlternatives": [
+            "Mnemonic: She Looks Too Pretty Try To Catch Her"
+          ],
+          "markingCriteria": [
+            "2.5 marks for proximal row",
+            "2.5 marks for distal row"
+          ],
+          "diagramReferences": [],
+          "confidence": 0.98
+        },
+        {
+          "questionId": "2.b",
+          "subquestionId": "b",
+          "isAlternative": false,
+          "isParentHeader": false,
+          "questionText": "Explain the anatomical basis of Carpal Tunnel Syndrome.",
+          "maxMarks": 5,
+          "referenceAnswer": "Compression of median nerve beneath the flexor retinaculum...",
+          "expectedConcepts": [
+            "Flexor retinaculum boundaries",
+            "Median nerve compression",
+            "Ape thumb deformity / thenar wasting"
+          ],
+          "acceptableAlternatives": [
+            "Can mention sensory loss in lateral 3.5 digits"
+          ],
+          "markingCriteria": [
+            "2 marks for boundaries",
+            "3 marks for symptoms and signs"
+          ],
+          "diagramReferences": [],
+          "confidence": 0.94
+        }
+      ],
+      "metadata": {
+        "institutionId": "inst_aarshiv_1793749708429",
+        "createdBy": "prof_sharma_1793749708429",
+        "createdAt": 1793749708436,
+        "updatedAt": 1793749708440,
+        "sourceDocName": "QP_Anatomy_2026.pdf",
+        "approvedAt": 1793749708440,
+        "approvedBy": "prof_sharma_1793749708429"
+      },
+      "questionPaperFingerprint": "e250a2ca1242e798caccb48f690413a84650c9e1b94ed0c42187cfce6cf26c6d",
+      "sourceQuestionPaperDoc": {
+        "name": "QP_Anatomy_2026.pdf",
+        "text": "Question 1: Describe the course and branches of the Median Nerve (10 marks). Question 2: (a) Enumerate carpal bones (5 marks). (b) Carpal tunnel syndrome (5 marks)."
+      }
+    }
+  },
+  "report": {
+    "studentName": "Anatomy Student",
+    "testTitle": "Anatomy Assessment",
+    "testTopics": "Upper Limb Anatomy",
+    "testDate": "2026-10-29",
+    "totalScore": 16,
+    "maxScore": 20,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 8,
+        "maxMarks": 10,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Good description of course. Missed one cutaneous branch."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2.a",
+        "marks": 4,
+        "maxMarks": 5,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Named 7 of 8 carpal bones accurately."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2.b",
+        "marks": 4,
+        "maxMarks": 5,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Clear explanation of flexor retinaculum compression."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Strong grasp of upper limb anatomy."
+      ],
+      "mcqs": [
+        "N/A"
+      ],
+      "contentAccuracy": [
+        "Accurate anatomical terminology."
+      ],
+      "completenessOfAnswers": [
+        "Comprehensive answers with minor omission of cutaneous branch."
+      ],
+      "presentationDiagrams": [
+        "Neat descriptions."
+      ],
+      "investigations": [
+        "N/A"
+      ],
+      "attemptingQuestions": [
+        "Attempted all questions."
+      ],
+      "actionPoints": [
+        "Revise sensory nerve distributions."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "eb8345d3-404d-4bae-ad2a-6ad9754a7042",
+    "timestamp": 1793749718568,
+    "answerKeyId": "ak_1793749708430_45db9e3537e9",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "ai_generated"
+  }
+}

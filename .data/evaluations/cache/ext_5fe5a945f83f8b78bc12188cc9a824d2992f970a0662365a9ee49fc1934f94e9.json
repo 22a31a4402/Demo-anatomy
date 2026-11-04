@@ -1,0 +1,35 @@
+{
+  "studentName": "Srinivasa Ramanujan",
+  "examTitle": "Advanced Calculus & Analytical Geometry",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "Used double angle identity: sin(x)cos(x) = (1/2)sin(2x). Antiderivative is -(1/4)cos(2x). Evaluated between 0 and pi/2 gives -1/4(-1 - 1) = 1/2.",
+      "formulas": [
+        "sin(x)cos(x) = 0.5sin(2x)",
+        "\\int 0.5sin(2x)dx = -0.25cos(2x)",
+        "Result = 0.5"
+      ],
+      "isAttempted": true,
+      "confidence": 0.99,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "MATH_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    },
+    {
+      "questionId": "2",
+      "studentAnswerText": "Constructed rectangle with sides b and h. Triangle is half the rectangle. Area = 0.5 * b * h.",
+      "diagramDescription": "Hand-drawn right-angled triangle with vertices labeled A, B, C; base labeled b, vertical altitude labeled h, right angle marked at vertex B.",
+      "formulas": [
+        "Area = 0.5 * b * h"
+      ],
+      "isAttempted": true,
+      "confidence": 0.96,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "MATH_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    }
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749709839
+}

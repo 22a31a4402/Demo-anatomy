@@ -1,0 +1,27 @@
+{
+  "studentName": "Adam Smith",
+  "examTitle": "Financial Accounting & Microeconomics",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "Office Equipment A/c  Dr. 50,000\n   To Cash A/c              20,000\n   To Accounts Payable      30,000\n(Office equipment acquired for cash and on account)",
+      "isAttempted": true,
+      "confidence": 0.99,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "COMM_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    },
+    {
+      "questionId": "2",
+      "studentAnswerText": "Higher input cost reduces profitability at every price level, causing supply curve to shift to the left. At the original price there is shortage, driving price up to new equilibrium P2 while quantity traded falls to Q2.",
+      "diagramDescription": "Market equilibrium graph with Price on Y-axis and Quantity on X-axis; downward-sloping Demand curve D; initial supply S1 and leftward shifted supply S2; arrow showing price rise from P1 to P2 and quantity drop from Q1 to Q2.",
+      "isAttempted": true,
+      "confidence": 0.96,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "COMM_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    }
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749709851
+}

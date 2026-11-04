@@ -1,0 +1,6 @@
+{
+  "name": "Anatomy Guru - NextGen AI Evaluation System",
+  "description": "AI-powered answer sheet evaluation and academic assessment platform with multimodal grading, batch processing, and high-performance Netlify deployment.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

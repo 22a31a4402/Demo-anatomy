@@ -1,0 +1,79 @@
+{
+  "evaluationId": "b3a30f03-ed85-4dce-a5e5-0c7f76f28117",
+  "correlationId": "eval_1793749707877_b5e0b722",
+  "studentName": "Cancel Test Student",
+  "testTitle": "Academic Assessment",
+  "mode": "without-manual",
+  "evaluationStatus": "cancelled",
+  "error": null,
+  "model": "gemini-3.8-flash",
+  "modelsUsed": [
+    "gemini-3.8-flash"
+  ],
+  "tokens": {
+    "inputTokens": null,
+    "outputTokens": null,
+    "cachedTokens": null,
+    "totalTokens": null
+  },
+  "extractionCost": {
+    "usd": null,
+    "inr": null
+  },
+  "gradingCost": {
+    "usd": null,
+    "inr": null
+  },
+  "totalCost": {
+    "usd": null,
+    "inr": null
+  },
+  "stages": {
+    "extraction": {
+      "status": "skipped",
+      "calls": 0,
+      "retries": 0,
+      "model": null,
+      "latencyMs": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    },
+    "grading": {
+      "status": "not_attempted",
+      "calls": 0,
+      "retries": 0,
+      "model": null,
+      "latencyMs": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    }
+  },
+  "retries": 0,
+  "fallbacks": 0,
+  "apiCalls": 0,
+  "successfulCalls": 0,
+  "failedCalls": 0,
+  "apiLatencyMs": 0,
+  "latencyMs": 1,
+  "pricing": {
+    "version": "pricing_v2.1_2026_05",
+    "exchangeRateUsed": 85
+  },
+  "zeroFabrication": {
+    "isCostCalculable": false,
+    "uncalculatedReason": "NO_API_CALLS_RECORDED",
+    "usageCompleteness": "UNAVAILABLE",
+    "dataSource": "UNKNOWN",
+    "isPartial": true
+  },
+  "timestamp": 1793749707879,
+  "createdAt": "2026-11-03T23:48:27.879Z"
+}

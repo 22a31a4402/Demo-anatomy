@@ -1,0 +1,74 @@
+{
+  "cacheKey": "5d4afd3de11423e4f34c39631fcbf9031087b0d732547fe6f2e6a9647f211632",
+  "report": {
+    "studentName": "Srinivasa Ramanujan",
+    "testTitle": "Advanced Calculus & Analytical Geometry",
+    "testTopics": "Definite Integrals & Geometric Proofs",
+    "testDate": "2026-10-30",
+    "totalScore": 20,
+    "maxScore": 20,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 10,
+        "maxMarks": 10,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Correctly applied alternative double-angle identity.",
+          "Flawless calculation of definite limits.",
+          "Exact result 1/2."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2",
+        "marks": 10,
+        "maxMarks": 10,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Solid rectangle decomposition proof.",
+          "Accurate hand-drawn right triangle with all labels and right-angle box."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Outstanding mathematical rigor and analytical clarity."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Precise calculus identities and geometric proof principles."
+      ],
+      "completenessOfAnswers": [
+        "All intermediate derivation steps fully articulated."
+      ],
+      "presentationDiagrams": [
+        "Clean diagrammatic presentation with clear vertex labels."
+      ],
+      "investigations": [
+        "Valid double-angle substitution methodology."
+      ],
+      "attemptingQuestions": [
+        "Attempted all questions completely."
+      ],
+      "actionPoints": [
+        "Continue exploring multi-variable integration."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "eval_math_1793749709838",
+    "timestamp": 1793749709840,
+    "answerKeyId": "ak_1793749709836_ea62e19e6104",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "ai_generated"
+  },
+  "timestamp": 1793749709840,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 1800,
+  "outputTokens": 400,
+  "estimatedCostSaved": 0.00034,
+  "institutionId": "inst_math_01"
+}

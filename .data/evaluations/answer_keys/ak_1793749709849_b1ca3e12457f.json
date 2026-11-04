@@ -1,0 +1,101 @@
+{
+  "id": "ak_1793749709849_b1ca3e12457f",
+  "examId": "exam_1793749709850",
+  "title": "Financial Accounting & Microeconomics",
+  "subject": "Commerce & Economics",
+  "grade": "B.Com / Economics Year 1",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "approved",
+  "printedMaxMarks": 12,
+  "totalMaxMarks": 12,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 12,
+    "calculatedTotalMarks": 12,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 12
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 12
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Record the journal entry for purchasing office equipment for $50,000, paying $20,000 cash and balance on credit.",
+      "maxMarks": 6,
+      "referenceAnswer": "Equipment A/c Dr. $50,000\n  To Cash A/c $20,000\n  To Accounts Payable A/c $30,000\n(Being equipment purchased partly in cash and partly on credit)",
+      "expectedConcepts": [
+        "Debit asset increase (Equipment)",
+        "Credit asset decrease (Cash)",
+        "Credit liability increase (Accounts Payable)",
+        "Sum equality: 50,000 = 20,000 + 30,000"
+      ],
+      "acceptableAlternatives": [
+        "Trade Creditors in place of Accounts Payable"
+      ],
+      "markingCriteria": [
+        "2 marks for debit entry",
+        "2 marks for cash credit",
+        "2 marks for accounts payable credit"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.99
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Explain the market equilibrium effect of an increase in raw material costs using a supply-demand curve diagram.",
+      "maxMarks": 6,
+      "referenceAnswer": "An increase in raw material costs decreases supply, shifting supply curve leftward from S1 to S2. Demand remains unchanged. Equilibrium price rises from P1 to P2, and equilibrium quantity falls from Q1 to Q2.",
+      "expectedConcepts": [
+        "Supply curve shifts leftward (S1 to S2)",
+        "Demand curve remains constant",
+        "Higher equilibrium price (P2 > P1)",
+        "Lower equilibrium quantity (Q2 < Q1)"
+      ],
+      "acceptableAlternatives": [
+        "Price increase and quantity decrease graphical demonstration"
+      ],
+      "markingCriteria": [
+        "3 marks for verbal analysis",
+        "3 marks for correct labeled supply-demand curve shift graph"
+      ],
+      "diagramReferences": [
+        "Supply and Demand curve graph showing S1->S2 left shift, price increase P1->P2, quantity decrease Q1->Q2"
+      ],
+      "confidence": 0.97
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_commerce_01",
+    "createdBy": "prof_keynes",
+    "createdAt": 1793749709850,
+    "updatedAt": 1793749709851,
+    "sourceDocName": "QP_Commerce.pdf",
+    "approvedAt": 1793749709851,
+    "approvedBy": "prof_keynes"
+  },
+  "questionPaperFingerprint": "d3ab43347435d0851a29174d2db366ff8c2e2ea2e5d4d66adebfb0d699123923",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_Commerce.pdf",
+    "text": "Prepare the Balance Sheet as of 31st March with ledger account details and journal entry for equipment purchase.",
+    "base64": "B64_COMMERCE",
+    "mimeType": "application/pdf"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "cacheKey": "194bcea5d2634cfb6d0f8d6b957a8c557767ba3f5186c4d6400e01485301f07e",
+  "report": {
+    "studentName": "Rahul Kumar",
+    "testTitle": "Anatomy Assessment",
+    "testTopics": "Upper Limb Anatomy",
+    "testDate": "2026-10-30",
+    "totalScore": 13,
+    "maxScore": 20,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 8.5,
+        "maxMarks": 10,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Good anatomical relations in cubital fossa.",
+          "Well-labeled diagram."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2.a",
+        "marks": 4.5,
+        "maxMarks": 5,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "All 8 carpal bones enumerated in anatomical order."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2.b",
+        "marks": 0,
+        "maxMarks": 5,
+        "isCorrect": false,
+        "feedbackPoints": [
+          "Question not attempted by student. 0 marks awarded."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Satisfactory performance."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Accurate descriptions."
+      ],
+      "completenessOfAnswers": [
+        "Question 2.b was omitted."
+      ],
+      "presentationDiagrams": [
+        "Clear hand-drawn schematic with appropriate labeling."
+      ],
+      "investigations": [
+        "Methodology steps reviewed."
+      ],
+      "attemptingQuestions": [
+        "Attempted Q1 and Q2.a. Missed Q2.b."
+      ],
+      "actionPoints": [
+        "Attempt all questions to maximize score potential."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "2ad3d015-8f5d-43e5-938a-93b3383c834d",
+    "timestamp": 1793749709831,
+    "answerKeyId": "ak_1793749708430_45db9e3537e9",
+    "answerKeyVersion": 2,
+    "answerKeySourceMode": "ai_generated"
+  },
+  "timestamp": 1793749709831,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 1900,
+  "outputTokens": 400,
+  "estimatedCostSaved": 0.00035,
+  "institutionId": "inst_aarshiv_1793749708429",
+  "createdBy": "prof_sharma_1793749708429"
+}

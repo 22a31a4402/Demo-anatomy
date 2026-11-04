@@ -1,0 +1,79 @@
+{
+  "evaluationId": "57f14f07-5ec9-499e-996d-76992ee251db",
+  "correlationId": "eval_1793749708439_91503eae",
+  "studentName": "Student Unapproved Key Test",
+  "testTitle": "Academic Assessment",
+  "mode": "without-manual",
+  "evaluationStatus": "needs_review",
+  "error": "Academic Validation Discrepancy: Cannot evaluate student script with unapproved answer key. Current status: 'draft'. The instructor must review and approve the answer key first.",
+  "model": "gemini-3.8-flash",
+  "modelsUsed": [
+    "gemini-3.8-flash"
+  ],
+  "tokens": {
+    "inputTokens": null,
+    "outputTokens": null,
+    "cachedTokens": null,
+    "totalTokens": null
+  },
+  "extractionCost": {
+    "usd": null,
+    "inr": null
+  },
+  "gradingCost": {
+    "usd": null,
+    "inr": null
+  },
+  "totalCost": {
+    "usd": null,
+    "inr": null
+  },
+  "stages": {
+    "extraction": {
+      "status": "not_attempted",
+      "calls": 0,
+      "retries": 0,
+      "model": null,
+      "latencyMs": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    },
+    "grading": {
+      "status": "not_attempted",
+      "calls": 0,
+      "retries": 0,
+      "model": null,
+      "latencyMs": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    }
+  },
+  "retries": 0,
+  "fallbacks": 0,
+  "apiCalls": 0,
+  "successfulCalls": 0,
+  "failedCalls": 0,
+  "apiLatencyMs": 0,
+  "latencyMs": 1,
+  "pricing": {
+    "version": "pricing_v2.1_2026_05",
+    "exchangeRateUsed": 85
+  },
+  "zeroFabrication": {
+    "isCostCalculable": false,
+    "uncalculatedReason": "NO_API_CALLS_RECORDED",
+    "usageCompleteness": "UNAVAILABLE",
+    "dataSource": "UNKNOWN",
+    "isPartial": true
+  },
+  "timestamp": 1793749708450,
+  "createdAt": "2026-11-03T23:48:28.450Z"
+}

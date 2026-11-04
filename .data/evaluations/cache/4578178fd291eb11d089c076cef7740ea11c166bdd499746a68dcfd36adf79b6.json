@@ -1,0 +1,72 @@
+{
+  "cacheKey": "4578178fd291eb11d089c076cef7740ea11c166bdd499746a68dcfd36adf79b6",
+  "report": {
+    "studentName": "Adam Smith",
+    "testTitle": "Financial Accounting & Microeconomics",
+    "testTopics": "Double Entry Bookkeeping & Market Dynamics",
+    "testDate": "2026-10-30",
+    "totalScore": 12,
+    "maxScore": 12,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 6,
+        "maxMarks": 6,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Correct compound journal entry with balanced debit and credit totals."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2",
+        "marks": 6,
+        "maxMarks": 6,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Sound economic reasoning on input cost shock.",
+          "Accurate supply shift diagram with labeled price and quantity axes."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Strong command of commercial accounting principles and microeconomics."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Accurate double-entry rules and equilibrium shifts."
+      ],
+      "completenessOfAnswers": [
+        "Clear compound entries and graphical explanations."
+      ],
+      "presentationDiagrams": [
+        "Neat supply and demand curve graph with clear directional arrows."
+      ],
+      "investigations": [
+        "Market clearing mechanism correctly explained."
+      ],
+      "attemptingQuestions": [
+        "Full question coverage."
+      ],
+      "actionPoints": [
+        "Explore price elasticity of supply impacts."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "eval_comm_1793749709851",
+    "timestamp": 1793749709852,
+    "answerKeyId": "ak_1793749709849_b1ca3e12457f",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "ai_generated"
+  },
+  "timestamp": 1793749709852,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 1800,
+  "outputTokens": 400,
+  "estimatedCostSaved": 0.00034,
+  "institutionId": "inst_commerce_01"
+}

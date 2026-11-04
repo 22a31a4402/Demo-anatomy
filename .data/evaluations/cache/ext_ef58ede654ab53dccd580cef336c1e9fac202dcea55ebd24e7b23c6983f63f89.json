@@ -1,0 +1,27 @@
+{
+  "studentName": "Ada Lovelace",
+  "examTitle": "Data Structures & Algorithms",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "def binary_search(arr, target):\n    l, r = 0, len(arr) - 1\n    while l <= r:\n        m = l + (r - l) // 2\n        if arr[m] == target: return m\n        elif arr[m] < target: l = m + 1\n        else: r = m - 1\n    return -1\nEach step divides N by 2, leading to log2(N) steps -> O(log N). Empty array: l=0, r=-1, loop terminates immediately returning -1.",
+      "isAttempted": true,
+      "confidence": 0.98,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "CS_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    },
+    {
+      "questionId": "2",
+      "studentAnswerText": "Truth table:\nS A B | Y\n0 0 X | 0\n0 1 X | 1\n1 X 0 | 0\n1 X 1 | 1\nLogic expression Y = (A and ~S) or (B and S).",
+      "diagramDescription": "Drawn 2-to-1 MUX schematic with select line S inverted to first AND gate with input A; non-inverted S to second AND gate with input B; outputs merged into final OR gate labeled Y.",
+      "isAttempted": true,
+      "confidence": 0.95,
+      "flaggedUncertain": false,
+      "visualEvidenceBase64": "CS_B64_DATA",
+      "visualEvidenceMimeType": "application/pdf"
+    }
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749709844
+}

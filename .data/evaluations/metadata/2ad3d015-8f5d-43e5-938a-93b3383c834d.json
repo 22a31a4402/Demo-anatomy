@@ -1,0 +1,79 @@
+{
+  "evaluationId": "2ad3d015-8f5d-43e5-938a-93b3383c834d",
+  "correlationId": "eval_1793749709830_2a0cdc26",
+  "studentName": "Rahul Kumar",
+  "testTitle": "Academic Assessment",
+  "mode": "without-manual",
+  "evaluationStatus": "completed",
+  "error": null,
+  "model": "gemini-3.8-flash",
+  "modelsUsed": [
+    "gemini-3.8-flash"
+  ],
+  "tokens": {
+    "inputTokens": 4000,
+    "outputTokens": 850,
+    "cachedTokens": 0,
+    "totalTokens": 4850
+  },
+  "extractionCost": {
+    "usd": 0.00039,
+    "inr": 0.0331
+  },
+  "gradingCost": {
+    "usd": 0.00035,
+    "inr": 0.0297
+  },
+  "totalCost": {
+    "usd": 0.00074,
+    "inr": 0.0629
+  },
+  "stages": {
+    "extraction": {
+      "status": "success",
+      "calls": 1,
+      "retries": 0,
+      "model": "gemini-3.8-flash",
+      "latencyMs": 0,
+      "inputTokens": 2100,
+      "outputTokens": 450,
+      "cachedTokens": 0,
+      "totalTokens": 2550,
+      "costUsd": 0.00039,
+      "costInr": 0.0331
+    },
+    "grading": {
+      "status": "success",
+      "calls": 1,
+      "retries": 0,
+      "model": "gemini-3.8-flash",
+      "latencyMs": 0,
+      "inputTokens": 1900,
+      "outputTokens": 400,
+      "cachedTokens": 0,
+      "totalTokens": 2300,
+      "costUsd": 0.00035,
+      "costInr": 0.0297
+    }
+  },
+  "retries": 0,
+  "fallbacks": 0,
+  "apiCalls": 2,
+  "successfulCalls": 2,
+  "failedCalls": 0,
+  "apiLatencyMs": 0,
+  "latencyMs": 1,
+  "pricing": {
+    "version": "pricing_v2.1_2026_05",
+    "exchangeRateUsed": 85
+  },
+  "zeroFabrication": {
+    "isCostCalculable": true,
+    "uncalculatedReason": null,
+    "usageCompleteness": "COMPLETE",
+    "dataSource": "SIMULATED_MOCK",
+    "isPartial": false
+  },
+  "timestamp": 1793749718542,
+  "createdAt": "2026-11-03T23:48:38.542Z"
+}

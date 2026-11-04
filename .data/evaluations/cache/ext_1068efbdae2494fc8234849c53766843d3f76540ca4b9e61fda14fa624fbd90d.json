@@ -1,0 +1,32 @@
+{
+  "studentName": "Anatomy Student",
+  "examTitle": "Anatomy End-Term Assessment",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "The median nerve enters the forearm between two heads of pronator teres, gives anterior interosseous branch, supplies flexors...",
+      "diagramDescription": "Forearm flexor compartment diagram drawn with median nerve highlighted.",
+      "isAttempted": true,
+      "confidence": 0.95,
+      "flaggedUncertain": false
+    },
+    {
+      "questionId": "2.a",
+      "subquestionId": "a",
+      "studentAnswerText": "Proximal row: Scaphoid, Lunate, Triquetrum, Pisiform. Distal row: Trapezium, Trapezoid, Capitate, Hamate.",
+      "isAttempted": true,
+      "confidence": 0.98,
+      "flaggedUncertain": false
+    },
+    {
+      "questionId": "2.b",
+      "subquestionId": "b",
+      "studentAnswerText": "Carpal tunnel syndrome occurs due to compression of median nerve beneath flexor retinaculum, causing ape thumb and thenar wasting.",
+      "isAttempted": true,
+      "confidence": 0.94,
+      "flaggedUncertain": false
+    }
+  ],
+  "visualEvidenceRetained": true,
+  "extractedAt": 1793749708442
+}

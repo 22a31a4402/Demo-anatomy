@@ -1,0 +1,72 @@
+{
+  "cacheKey": "b2aa499f2490b6af2f69ef1d10bf2a37f6a774aa42dc242e37b45d70cf1d9d6b",
+  "report": {
+    "studentName": "Marie Curie",
+    "testTitle": "Organic & Physical Chemistry Mid-Term",
+    "testTopics": "Stoichiometry & Reaction Mechanisms",
+    "testDate": "2026-10-30",
+    "totalScore": 10,
+    "maxScore": 10,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 4,
+        "maxMarks": 4,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Correctly balanced stoichiometric combustion equation."
+        ],
+        "isFlagged": false
+      },
+      {
+        "qNo": "2",
+        "marks": 6,
+        "maxMarks": 6,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Accurate chemical transition state illustration.",
+          "Clear explanation of backside nucleophilic attack and Walden inversion."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Mastery of organic reaction pathways and chemical stoichiometry."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Flawless chemical formulas and balancing."
+      ],
+      "completenessOfAnswers": [
+        "Comprehensive mechanism and transition state."
+      ],
+      "presentationDiagrams": [
+        "Accurate chemical bond arrows and stereochemical inversion."
+      ],
+      "investigations": [
+        "Bimolecular mechanism kinetics correctly reflected."
+      ],
+      "attemptingQuestions": [
+        "All questions attempted."
+      ],
+      "actionPoints": [
+        "Continue exploring stereospecific synthesis reactions."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "eval_chem_1793749709847",
+    "timestamp": 1793749709849,
+    "answerKeyId": "ak_1793749709846_c388eaffb985",
+    "answerKeyVersion": 1,
+    "answerKeySourceMode": "uploaded"
+  },
+  "timestamp": 1793749709849,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 1800,
+  "outputTokens": 400,
+  "estimatedCostSaved": 0.00034,
+  "institutionId": "inst_chem_01"
+}

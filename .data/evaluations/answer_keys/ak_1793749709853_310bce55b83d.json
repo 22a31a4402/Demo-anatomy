@@ -1,0 +1,101 @@
+{
+  "id": "ak_1793749709853_310bce55b83d",
+  "examId": "exam_1793749709854",
+  "title": "English Literature & European History",
+  "subject": "Humanities & Literature",
+  "grade": "B.A. Literature Year 2",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "approved",
+  "printedMaxMarks": 20,
+  "totalMaxMarks": 20,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 20,
+    "calculatedTotalMarks": 20,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 20
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 2,
+        "calculatedTotalMarks": 20
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Analyze Shakespeare's depiction of vaulting ambition and psychological guilt in Macbeth. Support with textual references.",
+      "maxMarks": 10,
+      "referenceAnswer": "Macbeth examines how hubris and prophetic temptation override moral conscience. Key soliloquies (\"If it were done when 'tis done\", \"Tomorrow and tomorrow\") reveal internal descent into paranoia, echoed by Lady Macbeth's somnambulism (\"Out, damned spot\").",
+      "expectedConcepts": [
+        "Vaulting ambition as tragic hamartia",
+        "Supernatural temptation vs moral agency",
+        "Psychological decay of Macbeth and Lady Macbeth",
+        "Specific textual citations/soliloquies"
+      ],
+      "acceptableAlternatives": [
+        "Aristotelian tragic flaw interpretation or political Jacobean allegory"
+      ],
+      "markingCriteria": [
+        "4 marks for thematic thesis",
+        "3 marks for textual citations",
+        "3 marks for literary analysis of dramatic irony and imagery"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.98
+    },
+    {
+      "questionId": "2",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Explain the socioeconomic and institutional causes of the French Revolution of 1789.",
+      "maxMarks": 10,
+      "referenceAnswer": "Causes include: 1) Three Estates feudal inequality with Third Estate bearing tax burden (taille), 2) Financial insolvency from Seven Years War and American Revolution, 3) Agricultural famine of 1788-1789, 4) Enlightenment ideals (Rousseau, Voltaire) challenging absolutism.",
+      "expectedConcepts": [
+        "Ancien Regime social hierarchy",
+        "Crown fiscal bankruptcy",
+        "Bread shortages/famine",
+        "Enlightenment political philosophy"
+      ],
+      "acceptableAlternatives": [
+        "Marxist class struggle analysis or revisionist fiscal-institutional interpretation"
+      ],
+      "markingCriteria": [
+        "3 marks for social structure & Estates General",
+        "3 marks for financial crisis",
+        "2 marks for Enlightenment influence",
+        "2 marks for immediate triggers (1788 harvests)"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.97
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_humanities_01",
+    "createdBy": "prof_woolf",
+    "createdAt": 1793749709854,
+    "updatedAt": 1793749709854,
+    "sourceDocName": "QP_English_Literature.pdf",
+    "approvedAt": 1793749709854,
+    "approvedBy": "prof_woolf"
+  },
+  "questionPaperFingerprint": "6af9c314fbb4160ca34a8691bed59155f0796c5006dcc164920c26c8a9e2ea7a",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_English_Literature.pdf",
+    "text": "Explain the central themes of power, guilt, and moral responsibility in 19th-century Victorian novels. Discuss with reference to two distinct authors and analyze their stylistic techniques in detail.",
+    "base64": "B64_PURE_TEXT",
+    "mimeType": "application/pdf"
+  }
+}

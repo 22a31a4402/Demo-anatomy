@@ -1,0 +1,58 @@
+{
+  "jobId": "ak_1793749709846_c388eaffb985",
+  "institutionId": "inst_chem_01",
+  "correlationId": "ak_ext_1793749709846_fe6c6f2a",
+  "totalCalls": 1,
+  "successfulCalls": 1,
+  "failedCalls": 0,
+  "retriedCalls": 0,
+  "fallbackCalls": 0,
+  "totalInputTokens": 1500,
+  "totalOutputTokens": 300,
+  "totalCachedTokens": 0,
+  "totalTokens": 1800,
+  "totalEstimatedCostUsd": 0.000101,
+  "totalEstimatedCostInr": 0.0086,
+  "retryAndFallbackCostUsd": 0,
+  "stageBreakdown": {
+    "answer_key_extraction": {
+      "calls": 1,
+      "costUsd": 0.000101,
+      "tokens": 1800
+    }
+  },
+  "modelsUsed": [
+    "gemini-3.1-flash-lite"
+  ],
+  "pricingVersion": "pricing_v2.1_2026_05",
+  "exchangeRateUsed": 85,
+  "usageCompleteness": "COMPLETE",
+  "dataSource": "SIMULATED_MOCK",
+  "calls": [
+    {
+      "callId": "call_1793749709846_301602",
+      "jobId": "ak_1793749709846_c388eaffb985",
+      "correlationId": "ak_ext_1793749709846_fe6c6f2a",
+      "institutionId": "inst_chem_01",
+      "pipelineStage": "answer_key_extraction",
+      "requestedModel": "gemini-3.1-flash-lite",
+      "actualModel": "gemini-3.1-flash-lite",
+      "attemptNumber": 1,
+      "isFallback": false,
+      "status": "success",
+      "latencyMs": 0,
+      "inputTokens": 1500,
+      "outputTokens": 300,
+      "cachedInputTokens": 0,
+      "totalTokens": 1800,
+      "usageSource": "SIMULATED_MOCK",
+      "estimatedCostUsd": 0.000101,
+      "estimatedCostInr": 0.0086,
+      "pricingVersion": "pricing_v2.1_2026_05",
+      "pricingTierUsed": "gemini-3.1-flash-lite",
+      "timestamp": 1793749709846
+    }
+  ],
+  "createdAt": 1793749709846,
+  "updatedAt": 1793749709846
+}

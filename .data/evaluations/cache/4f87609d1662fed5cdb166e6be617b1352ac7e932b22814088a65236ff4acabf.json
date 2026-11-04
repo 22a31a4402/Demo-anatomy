@@ -1,0 +1,59 @@
+{
+  "cacheKey": "4f87609d1662fed5cdb166e6be617b1352ac7e932b22814088a65236ff4acabf",
+  "report": {
+    "studentName": "Mock Student",
+    "testTitle": "Resilience Assessment",
+    "testTopics": "Pathology",
+    "testDate": "2026-05-15",
+    "totalScore": 10,
+    "maxScore": 10,
+    "questions": [
+      {
+        "qNo": "1",
+        "marks": 10,
+        "maxMarks": 10,
+        "isCorrect": true,
+        "feedbackPoints": [
+          "Correct biological pathway described."
+        ],
+        "isFlagged": false
+      }
+    ],
+    "generalFeedback": {
+      "overallPerformance": [
+        "Passed."
+      ],
+      "mcqs": [
+        "Objective questions evaluated."
+      ],
+      "contentAccuracy": [
+        "Accurate."
+      ],
+      "completenessOfAnswers": [
+        "Complete."
+      ],
+      "presentationDiagrams": [
+        "Good diagrams."
+      ],
+      "investigations": [
+        "Methodology steps reviewed."
+      ],
+      "attemptingQuestions": [
+        "Attempted."
+      ],
+      "actionPoints": [
+        "Continue revision."
+      ]
+    },
+    "evaluatedByModel": "gemini-3.8-flash",
+    "id": "47913403-1535-452f-8502-e8926a0b929b",
+    "timestamp": 1793749708428
+  },
+  "timestamp": 1793749708428,
+  "modelUsed": "gemini-3.8-flash",
+  "inputTokens": 15000,
+  "outputTokens": 3500,
+  "estimatedCostSaved": 0.00275,
+  "institutionId": "inst_aarshiv_01",
+  "createdBy": "prof_sharma"
+}

@@ -1,0 +1,31 @@
+{
+  "studentName": "Batch Student 3",
+  "examTitle": "Anatomy End-Term Assessment",
+  "answers": [
+    {
+      "questionId": "1",
+      "studentAnswerText": "Course and branches of median nerve described in detail.",
+      "isAttempted": true,
+      "confidence": 0.95,
+      "flaggedUncertain": false
+    },
+    {
+      "questionId": "2.a",
+      "subquestionId": "a",
+      "studentAnswerText": "All 8 carpal bones named correctly.",
+      "isAttempted": true,
+      "confidence": 0.98,
+      "flaggedUncertain": false
+    },
+    {
+      "questionId": "2.b",
+      "subquestionId": "b",
+      "studentAnswerText": "Carpal tunnel syndrome explained.",
+      "isAttempted": true,
+      "confidence": 0.94,
+      "flaggedUncertain": false
+    }
+  ],
+  "visualEvidenceRetained": false,
+  "extractedAt": 1793749709820
+}
