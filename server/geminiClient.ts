@@ -13,7 +13,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { GoogleGenAI, Type } from '@google/genai';
+import { GoogleGenAI, Type, ThinkingLevel } from '@google/genai';
 import { config } from './config';
 import { EvaluationReport } from './types';
 import {
@@ -35,7 +35,7 @@ export const getGeminiClient = (): GoogleGenAI => {
       apiKey: config.geminiApiKey,
       httpOptions: {
         headers: {
-          'User-Agent': 'anatomy-guru-eval',
+          'User-Agent': 'aistudio-build',
         },
       },
     });
@@ -533,9 +533,12 @@ export const callGeminiWithFallback = async (
   let totalRetries = 0;
   let fallbackCallsCount = 0;
   const overallStart = Date.now();
-  const overallTimeoutMs = options?.timeoutMs !== undefined ? options.timeoutMs : Math.max(config.requestTimeoutMs, 180000);
+  const overallTimeoutMs = options?.timeoutMs !== undefined ? options.timeoutMs : Math.max(config.requestTimeoutMs, 300000);
   const overallDeadline = overallStart + overallTimeoutMs;
-  const individualCallTimeoutMs = 60000; // 60s max per single API attempt
+  // Dynamic individual call timeout: give single calls up to 180s (or remaining budget) so large multimodal PDFs can finish without premature abort
+  const individualCallTimeoutMs = options?.timeoutMs !== undefined
+    ? Math.min(options.timeoutMs, 180000)
+    : Math.min(overallTimeoutMs, Math.max(150000, Math.floor(overallTimeoutMs * 0.6)));
   const modelTimeSpent: Record<string, number> = {};
 
   for (let modelIdx = 0; modelIdx < candidateModels.length; modelIdx++) {
@@ -652,20 +655,34 @@ export const callGeminiWithFallback = async (
               ? studentExtractionSchema
               : evaluationReportSchema;
 
+          const isGemini3Or4 = modelName.includes('gemini-3') || modelName.includes('gemini-4');
           const generateConfig: any = {
             systemInstruction,
-            temperature: 0,
-            seed: 42,
             responseMimeType: 'application/json',
           };
+
+          // Do not pass deprecated temperature or seed to gemini-3.8-flash or gemini-4-argon
+          if (!isGemini3Or4) {
+            generateConfig.temperature = 0;
+            generateConfig.seed = 42;
+          }
 
           if (schema) {
             generateConfig.responseSchema = schema;
           }
 
-          // Configure thinkingBudget to avoid token bloat on structured outputs (only for models that support it, e.g. 2.5 series)
-          const supportsThinking = modelName.includes('2.5');
-          if (supportsThinking) {
+          // Configure thinkingConfig:
+          // For Gemini 3.8 Flash, set thinkingLevel to LOW for structured extractions and grading
+          // to minimize reasoning latency and avoid timeouts on complex multi-page scripts.
+          if (modelName === 'gemini-3.8-flash' || modelName.includes('3.8-flash')) {
+            generateConfig.thinkingConfig = {
+              thinkingLevel: ThinkingLevel.LOW,
+            };
+          } else if (modelName === 'gemini-3.1-flash-lite' || modelName.includes('3.1-flash-lite')) {
+            generateConfig.thinkingConfig = {
+              thinkingLevel: ThinkingLevel.MINIMAL,
+            };
+          } else if (modelName.includes('2.5')) {
             if (typeof options?.thinkingBudget === 'number') {
               generateConfig.thinkingConfig = {
                 thinkingBudget: options.thinkingBudget,
@@ -676,7 +693,6 @@ export const callGeminiWithFallback = async (
               pipelineStage === 'student_extraction' ||
               pipelineStage === 'grading'
             ) {
-              // For structured extractions, answer keys, and grading, set thinkingBudget to 0 to eliminate 4000+ chain-of-thought tokens and avoid 120s timeouts
               generateConfig.thinkingConfig = {
                 thinkingBudget: 0,
               };

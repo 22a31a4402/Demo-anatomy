@@ -1,5 +1,9 @@
 import React from 'react';
-import { EvaluationReport, QuestionFeedback } from '../types';
+import { EvaluationReport } from '../types';
+import { logoBase64 } from '../services/logoBase64';
+
+// Use the local Base64-encoded logo to ensure zero CORS and perfect offline rendering in pdf exports
+const logo = logoBase64;
 
 interface FeedbackReportProps {
   report: EvaluationReport | null;
@@ -9,364 +13,304 @@ interface FeedbackReportProps {
 const FeedbackReport: React.FC<FeedbackReportProps> = ({ report, hideAuditTrail = false }) => {
   if (!report) {
     return (
-      <div className="flex items-center justify-center p-20 text-slate-400 font-bold uppercase tracking-widest text-sm">
+      <div className="flex items-center justify-center p-20 text-slate-400 font-bold uppercase tracking-widest">
         No report data available.
       </div>
     );
   }
 
-  const questions: QuestionFeedback[] = report.questions || [];
-  const total = Number(report.totalScore) || 0;
-  const max = Number(report.maxScore) || 100;
-  const pct = max > 0 ? Math.round((total / max) * 100) : 0;
-  const flaggedQuestions = questions.filter(q => q.isFlagged);
+  const calculatedSum = report.questions?.reduce((acc: number, q: any) => acc + (Number(q.marks) || 0), 0) || 0;
+  const displayScore = typeof report.totalScore === 'number' && !isNaN(report.totalScore)
+    ? report.totalScore
+    : calculatedSum;
+
+  const allQuestions = report.questions || [];
+  const flaggedQuestions = allQuestions.filter(q => q.isFlagged) || [];
+
+  const getQuestionStatus = (q: any) => {
+    const marks = Number(q.marks) || 0;
+    const feedbackText = q.feedbackPoints?.join(' ').toLowerCase() || '';
+
+    if (marks === 0 || feedbackText.includes('not attempted') || feedbackText.includes('skipped')) {
+      return 'unattempted';
+    }
+
+    if (feedbackText.includes('excellent') || feedbackText.includes('perfect') || feedbackText.includes('precise') || feedbackText.includes('correct')) {
+      return 'correct';
+    }
+
+    return 'partial';
+  };
+
+  const reportStyle: React.CSSProperties = {
+    fontFamily: '"Times New Roman", Times, serif',
+  };
 
   const printStyles = `
     @media print {
       @page {
-        margin: 12mm 15mm;
-        size: A4 portrait;
+        margin: 0;
       }
       body {
         margin: 0;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact;
       }
       .report-container {
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 20mm !important;
         box-shadow: none !important;
         border: none !important;
         width: 100% !important;
         max-width: none !important;
       }
-      .page-break-inside-avoid {
+      tr, h2, h3, h4, li, p, .general-feedback-section {
         page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
         break-inside: avoid !important;
       }
-      .no-print {
-        display: none !important;
+      .page-number::after {
+        content: counter(page);
+      }
+      .report-footer {
+        position: fixed;
+        bottom: 10mm;
+        right: 10mm;
+        font-size: 10px;
+        color: #666;
       }
     }
   `;
 
+  const headingStyle: React.CSSProperties = {
+    fontSize: '16px',
+    fontWeight: '900',
+  };
+
+  const contentStyle: React.CSSProperties = {
+    fontSize: '14px',
+  };
+
+  const sectionLabelStyle: React.CSSProperties = {
+    fontSize: '14px',
+    fontWeight: 'bold',
+  };
+
+  const renderBulletList = (items?: string[]) => {
+    if (!items || items.length === 0) return <p className="ml-10 text-slate-400 italic" style={contentStyle}>No specific feedback provided.</p>;
+
+    return (
+      <div className="ml-10 space-y-1.5 mb-2">
+        {items.map((item, i) => {
+          return (
+            <div key={i} className="relative pl-4 text-left feedback-bullet-point" style={contentStyle}>
+              <span className="absolute left-0 top-[2px] select-none font-bold text-slate-800">•</span>
+              <div className="text-slate-800 leading-normal font-normal">
+                <span dangerouslySetInnerHTML={{ __html: item.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
-    <div className="max-w-4xl mx-auto my-8 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200 report-container p-6 sm:p-10 text-slate-800 font-sans relative">
+    <div className="max-w-[850px] mx-auto my-10 bg-white shadow-none rounded-none border border-slate-300 report-container p-6 pb-40 sm:p-12 sm:pb-48 text-[#1e1e1e] animate-fade-in relative" style={reportStyle}>
       <style>{printStyles}</style>
 
-      {/* ==========================================
-          1. BRAND HEADER & SCORE CARD
-          ========================================== */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 page-break-inside-avoid">
-        {/* Aarshiv AI – Anatomy Guru Brand Identity */}
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/20 shrink-0">
-            AG
-          </div>
-          <div>
-            <div className="flex items-baseline">
-              <span className="text-2xl font-black tracking-tight text-slate-900">Anatomy</span>
-              <span className="text-2xl font-black tracking-tight text-blue-600 ml-1">Guru</span>
-            </div>
-            <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-              Aarshiv AI — Medical Answer-Sheet Evaluation
-            </p>
-          </div>
-        </div>
-
-        {/* Right-side Total Score Badge */}
-        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 px-4 flex items-center justify-between sm:justify-start gap-4 shrink-0 shadow-sm">
-          <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              TOTAL SCORE
-            </span>
-            <div className="flex items-baseline gap-1 mt-0.5">
-              <span className="text-2xl font-black text-[#F93A2C] leading-none">
-                {total}
-              </span>
-              <span className="text-sm font-bold text-slate-500">
-                / {max}
-              </span>
-            </div>
-          </div>
-          <div className="bg-[#F93A2C] text-white px-2.5 py-1 rounded-md text-xs font-black tracking-wide shadow-sm shadow-red-500/25">
-            {pct}%
-          </div>
+      {/* Brand Header */}
+      <div className="flex flex-col items-center mb-2">
+        <div className="flex items-center justify-center leading-none">
+          <img
+            src={logo}
+            alt="Anatomy Guru Logo"
+            className="w-64 object-contain block m-0 p-0 rounded"
+          />
         </div>
       </div>
 
-      {/* ==========================================
-          2. ASSESSMENT METADATA CARD
-          ========================================== */}
-      <div className="mt-5 bg-slate-50/90 border border-slate-200/80 rounded-xl p-4 sm:p-5 page-break-inside-avoid shadow-sm">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Left Column: Student & Subject */}
-          <div className="space-y-3">
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F93A2C] block">
-                STUDENT NAME
-              </span>
-              <p className="text-base font-black text-slate-900 mt-0.5">
-                {report.studentName || 'Unknown Student'}
-              </p>
-            </div>
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-                TEST / SUBJECT
-              </span>
-              <p className="text-sm font-bold text-slate-800 mt-0.5">
-                {report.testTitle || 'Academic Assessment'}
-              </p>
-            </div>
-          </div>
-
-          {/* Right Column: Date & Topics */}
-          <div className="space-y-3">
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-                EVALUATION DATE
-              </span>
-              <p className="text-sm font-semibold text-slate-800 mt-0.5">
-                {report.testDate || new Date().toISOString().split('T')[0]}
-              </p>
-            </div>
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-                TOPICS COVERED
-              </span>
-              <p className="text-xs font-medium text-slate-700 mt-0.5 leading-relaxed">
-                {report.testTopics || 'Standard Academic Assessment Syllabus'}
-              </p>
-            </div>
-          </div>
+      {/* Metadata Section */}
+      <div className="text-center mb-6">
+        <h2 className="text-red-600 uppercase tracking-widest border-b border-slate-200 pb-1 inline-block mb-3" style={headingStyle}>
+          {report.testTitle || 'General Medicine Test'}
+        </h2>
+        <div className="space-y-1" style={contentStyle}>
+          <p className="font-bold text-slate-800">Topics: {report.testTopics || 'N/A'}</p>
+          <p className="font-black text-blue-800 uppercase tracking-widest">Date: {report.testDate || 'N/A'}</p>
         </div>
       </div>
 
-      {/* ==========================================
-          3. QUESTION-BY-QUESTION EVALUATION
-          ========================================== */}
-      {questions.length > 0 && (
-        <div className="mt-8">
-          {/* Section Header with Right-Aligned Count Badge (Guaranteed No Overlapping) */}
-          <div className="flex items-center justify-between pb-2">
-            <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
-              Question-by-Question Evaluation
-            </h3>
-            <span className="text-xs font-bold text-slate-400">
-              ({questions.length} Questions Evaluated)
-            </span>
-          </div>
+      {/* Student Identification Row */}
+      <div className="mb-4 flex items-center gap-2 border-t pt-4 border-slate-100" style={contentStyle}>
+        <span className="text-red-600 font-black uppercase tracking-wide">Student Name:</span>
+        <span className="font-black text-slate-900 underline underline-offset-4 decoration-2 decoration-slate-300">{report.studentName || 'Unknown Student'}</span>
+      </div>
 
-          {/* Section Accent Rule (NextGen Red accent line + subtle divider) */}
-          <div className="relative h-1 mb-5">
-            <div className="absolute inset-0 bg-slate-200 h-[1px]"></div>
-            <div className="absolute left-0 top-0 bg-[#F93A2C] h-[2px] w-14 rounded-full"></div>
-          </div>
-
-          {/* Question List */}
-          <div className="space-y-4">
-            {questions.map((q: QuestionFeedback, idx: number) => {
-              const qMarks = Number(q.marks) || 0;
-              const qMax = Number(q.maxMarks) || 0;
-              const isFull = qMax > 0 && qMarks >= qMax;
-              const isZero = qMarks === 0;
+      {/* Assessment Table */}
+      <div className="border border-slate-400 overflow-hidden mb-8">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b border-slate-400 bg-white">
+              <th className="w-[10%] p-2 border-r border-slate-400 text-slate-900 uppercase tracking-wide text-center" style={headingStyle}>Q No</th>
+              <th className="w-[75%] p-2 border-r border-slate-400 text-slate-900 uppercase tracking-wide text-center" style={headingStyle}>Feedback</th>
+              <th className="w-[15%] p-2 text-slate-900 uppercase tracking-wide text-center" style={headingStyle}>Marks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allQuestions.map((q, idx) => {
+              const status = getQuestionStatus(q);
+              const isZeroOrUnattempted = Number(q.marks) === 0 || status === 'unattempted';
 
               return (
-                <div 
-                  key={idx} 
-                  className="border border-slate-200/90 rounded-xl overflow-hidden page-break-inside-avoid shadow-sm hover:border-slate-300 transition-colors"
-                >
-                  {/* Question Header Bar */}
-                  <div className="bg-slate-50/90 px-4 py-2.5 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-sm font-extrabold text-slate-900">
-                        Question {q.qNo}
+                <tr key={idx} className={`border-b border-slate-300 ${isZeroOrUnattempted ? 'text-red-600' : ''}`}>
+                  <td className="p-2 border-r border-slate-400 text-center font-bold align-top relative" style={contentStyle}>
+                    {q.qNo}
+                    {q.isFlagged && (
+                      <span className="block text-[10px] text-amber-600 font-bold" title={q.flaggedComment || 'Contradiction Resolved'}>
+                        *
                       </span>
-                      {isFull ? (
-                        <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          FULL MARKS
-                        </span>
-                      ) : isZero ? (
-                        <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200">
-                          ZERO / UNATTEMPTED
-                        </span>
-                      ) : (
-                        <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
-                          PARTIAL CREDIT
-                        </span>
-                      )}
-
-                      {q.isFlagged && (
-                        <span className="text-[11px] font-bold text-amber-600 flex items-center gap-1">
-                          (! Discrepancy Resolved)
-                        </span>
-                      )}
-                    </div>
-
-                    <span className="text-sm font-extrabold text-slate-900 ml-auto">
-                      Marks: {qMarks} / {qMax}
-                    </span>
-                  </div>
-
-                  {/* Question Feedback Bullets */}
-                  <div className="p-4 space-y-2 text-sm bg-white">
+                    )}
+                  </td>
+                  <td className="p-3 border-r border-slate-400 align-top">
                     {q.feedbackPoints && q.feedbackPoints.length > 0 ? (
-                      q.feedbackPoints.map((point: string, pIdx: number) => (
-                        <div key={pIdx} className="flex items-start gap-2.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#F93A2C] mt-2 shrink-0"></span>
-                          <p 
-                            className={`leading-relaxed text-sm ${isZero ? 'text-red-700' : 'text-slate-700'}`}
-                            dangerouslySetInnerHTML={{
-                              __html: point.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>')
-                            }}
-                          />
-                        </div>
-                      ))
+                      <div className="space-y-1.5 text-left" style={contentStyle}>
+                        {q.feedbackPoints.map((point: string, pIdx: number) => (
+                          <div key={pIdx} className="relative pl-4 text-left feedback-bullet-point">
+                            <span className="absolute left-0 top-[2px] select-none text-slate-800 font-bold">•</span>
+                            <div className={`leading-relaxed font-normal ${isZeroOrUnattempted ? 'italic text-red-600' : 'text-slate-800'}`}>
+                              <span dangerouslySetInnerHTML={{ __html: point.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     ) : (
-                      <p className="text-xs italic text-slate-400">
-                        No detailed observations recorded for this question.
-                      </p>
+                      <p className="text-slate-400 italic text-xs" style={contentStyle}>No specific feedback provided.</p>
                     )}
-
-                    {/* Evaluator Resolution Callout for Flagged Items */}
-                    {q.isFlagged && q.flaggedComment && (
-                      <div className="mt-3 p-3 bg-amber-50/90 border border-amber-200 rounded-lg text-xs leading-relaxed text-amber-900">
-                        <span className="font-extrabold text-amber-800 uppercase tracking-wide block mb-1">
-                          Evaluator Resolution:
-                        </span>
-                        {q.flaggedComment}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                  </td>
+                  <td className="p-2 text-center font-bold align-top" style={contentStyle}>
+                    {q.marks}
+                  </td>
+                </tr>
               );
             })}
-          </div>
+            <tr className="bg-slate-50 border-t border-slate-400">
+              <td colSpan={2} className="p-3 border-r border-slate-400 text-center font-black uppercase tracking-widest text-slate-500" style={contentStyle}>
+                Total Score Summation
+              </td>
+              <td className="p-3 text-center font-black text-slate-900 bg-white" style={headingStyle}>
+                {displayScore} / {report.maxScore || 100}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          {/* Score Summation Banner */}
-          <div className="mt-6 bg-slate-900 text-white rounded-xl p-3.5 px-5 flex items-center justify-between font-bold text-xs sm:text-sm tracking-wide shadow-md shadow-slate-900/10 page-break-inside-avoid">
-            <span className="uppercase tracking-wider">
-              TOTAL RECALCULATED SCORE SUMMATION
-            </span>
-            <span className="text-base sm:text-lg font-black text-white">
-              {total} / {max} <span className="text-slate-400 text-xs sm:text-sm font-normal">({pct}%)</span>
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* ==========================================
-          4. OVERALL FEEDBACK & RECOMMENDATIONS
-          ========================================== */}
+      {/* General Feedback Section */}
       {report.generalFeedback && (
-        <div className="mt-10 page-break-inside-avoid">
-          {/* Section Header */}
-          <div className="pb-2">
-            <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
-              Overall Feedback & Recommendations
-            </h3>
-          </div>
+        <div className="mt-6 border border-slate-900 p-6">
+          <h3 className="text-slate-900 font-bold mb-2 underline" style={headingStyle}>General Feedback:</h3>
 
-          {/* Section Accent Rule */}
-          <div className="relative h-1 mb-6">
-            <div className="absolute inset-0 bg-slate-200 h-[1px]"></div>
-            <div className="absolute left-0 top-0 bg-[#F93A2C] h-[2px] w-14 rounded-full"></div>
-          </div>
+          <div className="space-y-4">
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>1) Overall Performance</h4>
+              {renderBulletList(report.generalFeedback.overallPerformance)}
+            </div>
 
-          <div className="space-y-6">
-            {[
-              { key: 'overallPerformance', title: '1) Overall Performance' },
-              { key: 'mcqs', title: '2) Objective & MCQ Analysis' },
-              { key: 'contentAccuracy', title: '3) Content Accuracy & Core Concepts' },
-              { key: 'completenessOfAnswers', title: '4) Completeness of Answers' },
-              { key: 'presentationDiagrams', title: '5) Presentation, Structure & Diagrams' },
-              { key: 'investigations', title: '6) Key Methodologies, Workings & Explanations' },
-              { key: 'attemptingQuestions', title: '7) Question Attempt Strategy' },
-              { key: 'actionPoints', title: '8) Action Points & Recommended Next Steps' },
-            ].map((section) => {
-              const bullets = (report.generalFeedback as any)?.[section.key] || [];
-              if (bullets.length === 0) return null;
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>2) MCQs</h4>
+              {renderBulletList(report.generalFeedback.mcqs)}
+            </div>
 
-              return (
-                <div key={section.key} className="space-y-2 page-break-inside-avoid">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-900">
-                    {section.title}
-                  </h4>
-                  <div className="space-y-2 pl-1">
-                    {bullets.map((b: string, bIdx: number) => (
-                      <div key={bIdx} className="flex items-start gap-2.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#F93A2C] mt-2 shrink-0"></span>
-                        <p 
-                          className="text-sm text-slate-700 leading-relaxed"
-                          dangerouslySetInnerHTML={{
-                            __html: b.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>')
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>3) Content Accuracy</h4>
+              {renderBulletList(report.generalFeedback.contentAccuracy)}
+            </div>
+
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>4) Completeness of Answers</h4>
+              {renderBulletList(report.generalFeedback.completenessOfAnswers)}
+            </div>
+
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>5) Presentation & Diagrams (Major drawback)</h4>
+              {renderBulletList(report.generalFeedback.presentationDiagrams)}
+            </div>
+
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>6) Investigations (Must improve)</h4>
+              {renderBulletList(report.generalFeedback.investigations)}
+            </div>
+
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>7) Attempting All Questions</h4>
+              {renderBulletList(report.generalFeedback.attemptingQuestions)}
+            </div>
+
+            <div className="feedback-section-block">
+              <h4 style={sectionLabelStyle}>8) What to do next (Action points)</h4>
+              {renderBulletList(report.generalFeedback.actionPoints)}
+            </div>
           </div>
         </div>
       )}
 
-      {/* ==========================================
-          5. AUDIT TRAIL / CONTRADICTIONS SECTION
-          ========================================== */}
+      {/* Flagged Questions Section (Audit Trail) */}
       {!hideAuditTrail && flaggedQuestions.length > 0 && (
-        <div className="mt-10 page-break-inside-avoid">
-          {/* Section Header */}
-          <div className="pb-2">
-            <h3 className="text-base font-extrabold text-amber-700 tracking-tight">
-              Audit Trail: Resolution of Contradictions
-            </h3>
+        <div className="mt-12 p-6 bg-slate-50 border-2 border-slate-200 rounded-none animate-fade-in no-print">
+          <div className="flex items-center gap-3 mb-4 border-b border-slate-300 pb-2">
+            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">Audit Trail: Resolution of Contradictions</h3>
           </div>
-
-          {/* Section Accent Rule (Amber) */}
-          <div className="relative h-1 mb-4">
-            <div className="absolute inset-0 bg-slate-200 h-[1px]"></div>
-            <div className="absolute left-0 top-0 bg-amber-500 h-[2px] w-14 rounded-full"></div>
-          </div>
-
-          <p className="text-xs text-slate-500 italic mb-4 leading-relaxed">
-            The following questions exhibited a contradiction between provided human evaluation feedback and the official Answer Key. The system prioritized the Answer Key for the primary score, with the discrepancy resolution recorded below:
+          <p className="text-xs text-slate-600 mb-6 font-medium italic">
+            The following questions showed a significant contradiction between the Faculty Notes and the official Answer Key. 
+            The system has prioritized the Answer Key for the final report, but the original notes and auditor's resolution are preserved below.
           </p>
 
-          <div className="space-y-3">
-            {flaggedQuestions.map((fq: QuestionFeedback, idx: number) => (
-              <div 
-                key={idx} 
-                className="bg-amber-50/80 border border-amber-200/90 rounded-xl p-3.5 space-y-1.5"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">
-                    Question {fq.qNo} Discrepancy Note:
-                  </span>
-                  <span className="text-xs font-bold text-amber-700">
-                    Marks: {fq.marks} / {fq.maxMarks}
-                  </span>
+          <div className="space-y-6">
+            {flaggedQuestions.map((q, idx) => (
+              <div key={idx} className="border-l-4 border-amber-500 pl-4 py-1 feedback-section-block">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-black text-slate-900 uppercase text-sm">Question {q.qNo}</span>
                 </div>
-                <p className="text-xs text-amber-950 leading-relaxed">
-                  {fq.flaggedComment || 'Evaluator resolved discrepancy according to the marking scheme.'}
-                </p>
+
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="bg-white p-3 border border-slate-200">
+                    <span className="text-[10px] font-black text-slate-400 uppercase block mb-1">Original Faculty Observation:</span>
+                    <div className="space-y-1.5">
+                      {q.feedbackPoints.map((point: string, pIdx: number) => (
+                        <div key={pIdx} className="relative pl-4 text-left feedback-bullet-point">
+                          <span className="absolute left-0 top-[2px] select-none text-slate-700 text-xs">•</span>
+                          <div className="text-xs text-slate-700 leading-relaxed font-normal">
+                            <span dangerouslySetInnerHTML={{ __html: point.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {q.flaggedComment && (
+                    <div className="bg-amber-50 p-3 border border-amber-100 text-xs text-amber-900 font-semibold">
+                      <span className="uppercase tracking-wider text-[10px] opacity-60 block mb-1">Auditor's Resolution:</span>
+                      {q.flaggedComment}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* ==========================================
-          6. RUNNING BRAND FOOTER
-          ========================================== */}
-      <div className="mt-12 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 page-break-inside-avoid gap-2">
-        <span className="font-semibold">
-          Aarshiv AI – Anatomy Guru | AI-Powered Medical Answer-Sheet Evaluation
-        </span>
-        <span className="font-medium text-slate-400">
-          Official Medical Assessment Report
-        </span>
+      {/* Official Footer */}
+      <div className="mt-24 mb-12 flex justify-between items-center text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] border-t-2 border-slate-900 pt-8 pb-16">
+        <div className="flex items-center gap-6">
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      {/* Print-only page number footer */}
+      <div className="hidden print:block fixed bottom-8 right-8 text-[10px] text-slate-400 font-mono no-print">
+        <span className="page-number"></span>
       </div>
     </div>
   );

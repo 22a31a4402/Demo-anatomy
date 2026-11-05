@@ -1,0 +1,82 @@
+{
+  "evaluationId": "job_scen_5_1793883705021",
+  "correlationId": "corr_scen_5_1793883705021",
+  "studentName": "Rahul V",
+  "testTitle": "Physiology Paper",
+  "mode": "without-manual",
+  "evaluationStatus": "failed",
+  "error": "Evaluation failed across candidate models (gemini-3.8-flash, gemini-flash-latest, gemini-3.1-flash-lite, gemini-2.5-flash). Last error: 503 Service Unavailable: High load across all capacity on gemini-2.5-flash",
+  "model": "gemini-3.8-flash",
+  "modelsUsed": [
+    "gemini-3.8-flash",
+    "gemini-flash-latest",
+    "gemini-3.1-flash-lite",
+    "gemini-2.5-flash"
+  ],
+  "tokens": {
+    "inputTokens": null,
+    "outputTokens": null,
+    "cachedTokens": null,
+    "totalTokens": null
+  },
+  "extractionCost": {
+    "usd": null,
+    "inr": null
+  },
+  "gradingCost": {
+    "usd": null,
+    "inr": null
+  },
+  "totalCost": {
+    "usd": null,
+    "inr": null
+  },
+  "stages": {
+    "extraction": {
+      "status": "skipped",
+      "calls": 0,
+      "retries": 0,
+      "model": null,
+      "latencyMs": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    },
+    "grading": {
+      "status": "failed",
+      "calls": 8,
+      "retries": 4,
+      "model": "gemini-3.8-flash",
+      "latencyMs": 2,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedTokens": null,
+      "totalTokens": null,
+      "costUsd": null,
+      "costInr": null
+    }
+  },
+  "retries": 4,
+  "fallbacks": 6,
+  "apiCalls": 8,
+  "successfulCalls": 0,
+  "failedCalls": 8,
+  "apiLatencyMs": 2,
+  "latencyMs": 1,
+  "pricing": {
+    "version": "pricing_v2.1_2026_05",
+    "exchangeRateUsed": 85
+  },
+  "zeroFabrication": {
+    "isCostCalculable": false,
+    "uncalculatedReason": "NO_SUCCESSFUL_API_CALLS",
+    "usageCompleteness": "UNAVAILABLE",
+    "dataSource": "SIMULATED_MOCK",
+    "isPartial": true
+  },
+  "timestamp": 1793883707368,
+  "createdAt": "2026-11-05T13:01:47.368Z"
+}

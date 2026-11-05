@@ -23,7 +23,7 @@ export const config = {
   // Concurrency & Rate Limiting
   maxConcurrentEvaluations: parseInt(process.env.MAX_CONCURRENT_EVALS || '4', 10),
   maxRetriesPerModel: 2,
-  requestTimeoutMs: parseInt(process.env.REQUEST_TIMEOUT_MS || '180000', 10), // 180s default for large evaluations
+  requestTimeoutMs: parseInt(process.env.REQUEST_TIMEOUT_MS || '300000', 10), // 300s default for large evaluations
   // Token Pricing per 1M tokens (Gemini 2.5 / 3.x Flash tier)
   pricing: {
     inputPerMillion: 0.075,  // $0.075 per 1M input tokens

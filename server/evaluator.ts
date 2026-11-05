@@ -183,6 +183,7 @@ export class EvaluationEngine {
               jobId: job.id,
               institutionId: job.institutionId,
               fallbackStudentName: job.studentName,
+              timeoutMs: Math.max(config.requestTimeoutMs, 300000),
             }
           );
           job.extractedScript = extractedScript;
@@ -238,6 +239,7 @@ export class EvaluationEngine {
           jobId: job.id,
           institutionId: job.institutionId,
           pipelineStage: 'grading',
+          timeoutMs: Math.max(config.requestTimeoutMs, 300000),
         }
       );
       const gradingDuration = Date.now() - gradeStart;
@@ -268,6 +270,7 @@ export class EvaluationEngine {
           jobId: job.id,
           institutionId: job.institutionId,
           pipelineStage: 'grading',
+          timeoutMs: Math.max(config.requestTimeoutMs, 300000),
         }
       );
       job.metrics.geminiLatencyMs = Date.now() - geminiStart;

@@ -1,0 +1,71 @@
+{
+  "id": "ak_1793885661925_618ac9a44d61",
+  "examId": "exam_1793885661926",
+  "title": "Algorithms & Architecture",
+  "subject": "Computer Science",
+  "grade": "University Undergraduate",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "draft",
+  "printedMaxMarks": 10,
+  "totalMaxMarks": 10,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 10,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 1,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Implement binary search def binary_search(arr, target) and 2-to-1 MUX",
+      "maxMarks": 10,
+      "referenceAnswer": "Authoritative model answer for Algorithms & Architecture respecting subject conventions.",
+      "expectedConcepts": [
+        "Core Concept 1",
+        "Core Concept 2"
+      ],
+      "acceptableAlternatives": [
+        "Alternative phrasing or method"
+      ],
+      "markingCriteria": [
+        "5 marks for theoretical foundation",
+        "5 marks for accurate technical execution"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.98
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_validation",
+    "createdBy": "prof_validator",
+    "createdAt": 1793885661926,
+    "updatedAt": 1793885661926,
+    "sourceDocName": "QP_Computer_Science.pdf"
+  },
+  "questionPaperFingerprint": "47cdc5504123a6cd0f90b4c351615f2bb5fed81d9a0f8099c775e5011d4cf0e0",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_Computer_Science.pdf",
+    "text": "Implement binary search def binary_search(arr, target) and 2-to-1 MUX",
+    "base64": "B64_DATA",
+    "mimeType": "application/pdf"
+  }
+}

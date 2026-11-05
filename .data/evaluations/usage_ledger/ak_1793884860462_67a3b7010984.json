@@ -1,0 +1,83 @@
+{
+  "jobId": "ak_1793884860462_67a3b7010984",
+  "institutionId": "inst_ent",
+  "correlationId": "ak_gen_1793884860462_0abafceb",
+  "totalCalls": 2,
+  "successfulCalls": 0,
+  "failedCalls": 2,
+  "retriedCalls": 1,
+  "fallbackCalls": 0,
+  "totalInputTokens": null,
+  "totalOutputTokens": null,
+  "totalCachedTokens": null,
+  "totalTokens": null,
+  "totalEstimatedCostUsd": 0,
+  "totalEstimatedCostInr": 0,
+  "retryAndFallbackCostUsd": 0,
+  "stageBreakdown": {
+    "answer_key_generation": {
+      "calls": 2,
+      "costUsd": 0,
+      "tokens": 0
+    }
+  },
+  "modelsUsed": [
+    "gemini-3.1-flash-lite"
+  ],
+  "pricingVersion": "pricing_v2.1_2026_05",
+  "exchangeRateUsed": 85,
+  "usageCompleteness": "UNAVAILABLE",
+  "dataSource": "SIMULATED_MOCK",
+  "calls": [
+    {
+      "callId": "call_1793884860966_df3a71",
+      "jobId": "ak_1793884860462_67a3b7010984",
+      "correlationId": "ak_gen_1793884860462_0abafceb",
+      "institutionId": "inst_ent",
+      "pipelineStage": "answer_key_generation",
+      "requestedModel": "gemini-3.1-flash-lite",
+      "actualModel": "gemini-3.1-flash-lite",
+      "attemptNumber": 1,
+      "isFallback": false,
+      "status": "timeout",
+      "errorCategory": "TIMEOUT",
+      "latencyMs": 500,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedInputTokens": null,
+      "totalTokens": null,
+      "usageSource": "SIMULATED_MOCK",
+      "estimatedCostUsd": null,
+      "estimatedCostInr": null,
+      "pricingVersion": "pricing_v2.1_2026_05",
+      "pricingTierUsed": "gemini-3.1-flash-lite",
+      "timestamp": 1793884860966
+    },
+    {
+      "callId": "call_1793884860966_e8570e",
+      "jobId": "ak_1793884860462_67a3b7010984",
+      "correlationId": "ak_gen_1793884860462_0abafceb",
+      "institutionId": "inst_ent",
+      "pipelineStage": "answer_key_generation",
+      "requestedModel": "gemini-3.1-flash-lite",
+      "actualModel": "gemini-3.1-flash-lite",
+      "attemptNumber": 2,
+      "isFallback": false,
+      "status": "timeout",
+      "errorCategory": "OVERALL_DEADLINE_EXCEEDED",
+      "latencyMs": 501,
+      "inputTokens": null,
+      "outputTokens": null,
+      "cachedInputTokens": null,
+      "totalTokens": null,
+      "usageSource": "SIMULATED_MOCK",
+      "estimatedCostUsd": null,
+      "estimatedCostInr": null,
+      "pricingVersion": "pricing_v2.1_2026_05",
+      "pricingTierUsed": "gemini-3.1-flash-lite",
+      "timestamp": 1793884860967
+    }
+  ],
+  "createdAt": 1793884860966,
+  "updatedAt": 1793884860967
+}
