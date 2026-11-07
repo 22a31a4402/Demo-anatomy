@@ -1,0 +1,71 @@
+{
+  "id": "ak_1793886598034_654b25edf975",
+  "examId": "exam_1793886598036",
+  "title": "Financial Accounting",
+  "subject": "Commerce & Economics",
+  "grade": "University Undergraduate",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "draft",
+  "printedMaxMarks": 10,
+  "totalMaxMarks": 10,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 10,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 1,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Prepare Balance sheet, debit/credit journal entries, and supply shift graph",
+      "maxMarks": 10,
+      "referenceAnswer": "Authoritative model answer for Financial Accounting respecting subject conventions.",
+      "expectedConcepts": [
+        "Core Concept 1",
+        "Core Concept 2"
+      ],
+      "acceptableAlternatives": [
+        "Alternative phrasing or method"
+      ],
+      "markingCriteria": [
+        "5 marks for theoretical foundation",
+        "5 marks for accurate technical execution"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.98
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_validation",
+    "createdBy": "prof_validator",
+    "createdAt": 1793886598036,
+    "updatedAt": 1793886598036,
+    "sourceDocName": "QP_Commerce___Economics.pdf"
+  },
+  "questionPaperFingerprint": "b0fdef6b5a1afd2a0aaf83f59cf7d774750ec22a99cfe8f2cceeb24536ad53f1",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_Commerce___Economics.pdf",
+    "text": "Prepare Balance sheet, debit/credit journal entries, and supply shift graph",
+    "base64": "B64_DATA",
+    "mimeType": "application/pdf"
+  }
+}

@@ -107,8 +107,14 @@ answerKeysRouter.post('/extract', async (req: Request, res: Response): Promise<v
     res.status(201).json(key);
   } catch (err: any) {
     console.error('[answerKeysRouter] Extract error:', err);
-    if (err instanceof AnswerKeyValidationError) {
-      res.status(400).json({ error: err.message });
+    const isApiKeyMissing = /GEMINI_API_KEY is not configured/i.test(err?.message || '');
+    if (isApiKeyMissing) {
+      res.status(503).json({
+        error: 'GEMINI_API_KEY is not configured in Netlify environment variables. Please add GEMINI_API_KEY in your Netlify site settings (Site configuration > Environment variables).',
+        category: 'Configuration Error',
+        retryable: false,
+        statusCode: 503,
+      });
       return;
     }
     res.status(500).json({ error: err.message || 'Failed to extract answer key.' });

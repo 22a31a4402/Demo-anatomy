@@ -1,0 +1,71 @@
+{
+  "id": "ak_1794029055743_0e59b8e94562",
+  "examId": "exam_1794029055744",
+  "title": "Organic Chemistry II",
+  "subject": "Chemical Sciences",
+  "grade": "University Undergraduate",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "draft",
+  "printedMaxMarks": 10,
+  "totalMaxMarks": 10,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 10,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 1,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Explain SN2 nucleophilic attack mechanism and Walden inversion",
+      "maxMarks": 10,
+      "referenceAnswer": "Authoritative model answer for Organic Chemistry II respecting subject conventions.",
+      "expectedConcepts": [
+        "Core Concept 1",
+        "Core Concept 2"
+      ],
+      "acceptableAlternatives": [
+        "Alternative phrasing or method"
+      ],
+      "markingCriteria": [
+        "5 marks for theoretical foundation",
+        "5 marks for accurate technical execution"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.98
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_validation",
+    "createdBy": "prof_validator",
+    "createdAt": 1794029055744,
+    "updatedAt": 1794029055744,
+    "sourceDocName": "QP_Chemical_Sciences.pdf"
+  },
+  "questionPaperFingerprint": "c162d6a2cfa8181e1ac33f50707e1b8641cea77ac8b21aba56edf89fe986c1ec",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_Chemical_Sciences.pdf",
+    "text": "Explain SN2 nucleophilic attack mechanism and Walden inversion",
+    "base64": "B64_DATA",
+    "mimeType": "application/pdf"
+  }
+}

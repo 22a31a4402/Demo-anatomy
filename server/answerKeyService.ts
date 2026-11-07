@@ -133,59 +133,81 @@ export class AnswerKeyService {
   private cache: Map<string, CanonicalAnswerKey> = new Map();
 
   constructor() {
-    this.storageDir = path.join(process.cwd(), '.data', 'evaluations', 'answer_keys');
-    if (!fs.existsSync(this.storageDir)) {
-      fs.mkdirSync(this.storageDir, { recursive: true });
+    this.storageDir = path.join(config.dataDir, 'answer_keys');
+    try {
+      if (!fs.existsSync(this.storageDir)) {
+        fs.mkdirSync(this.storageDir, { recursive: true });
+      }
+    } catch (e) {
+      console.warn('[AnswerKeyService] Read-only or inaccessible storage directory, using in-memory store:', e);
     }
     this.loadAllFromDisk();
   }
 
   private loadAllFromDisk(): void {
-    try {
-      if (!fs.existsSync(this.storageDir)) return;
-      const files = fs.readdirSync(this.storageDir);
-      for (const file of files) {
-        if (file.endsWith('.json')) {
-          const filePath = path.join(this.storageDir, file);
-          try {
-            const raw = fs.readFileSync(filePath, 'utf-8');
-            const parsed: CanonicalAnswerKey = JSON.parse(raw);
-            if (parsed && parsed.id) {
-              if (!parsed.questionPaperFingerprint && parsed.sourceQuestionPaperDoc) {
-                parsed.questionPaperFingerprint = computeQuestionPaperFingerprint(parsed.sourceQuestionPaperDoc);
+    const candidateDirs = Array.from(
+      new Set([
+        this.storageDir,
+        path.join(process.cwd(), '.data', 'evaluations', 'answer_keys'),
+        path.join(process.cwd(), '..', '.data', 'evaluations', 'answer_keys'),
+      ])
+    );
+
+    for (const dir of candidateDirs) {
+      try {
+        if (!fs.existsSync(dir)) continue;
+        const files = fs.readdirSync(dir);
+        for (const file of files) {
+          if (file.endsWith('.json')) {
+            const filePath = path.join(dir, file);
+            try {
+              const raw = fs.readFileSync(filePath, 'utf-8');
+              const parsed: CanonicalAnswerKey = JSON.parse(raw);
+              if (parsed && parsed.id && !this.cache.has(parsed.id)) {
+                if (!parsed.questionPaperFingerprint && parsed.sourceQuestionPaperDoc) {
+                  parsed.questionPaperFingerprint = computeQuestionPaperFingerprint(parsed.sourceQuestionPaperDoc);
+                }
+                if (!parsed.referencePairHash && parsed.sourceQuestionPaperDoc && parsed.sourceAnswerKeyDoc) {
+                  parsed.referencePairHash = computeReferencePairHash(parsed.sourceQuestionPaperDoc, parsed.sourceAnswerKeyDoc);
+                }
+                this.cache.set(parsed.id, parsed);
               }
-              if (!parsed.referencePairHash && parsed.sourceQuestionPaperDoc && parsed.sourceAnswerKeyDoc) {
-                parsed.referencePairHash = computeReferencePairHash(parsed.sourceQuestionPaperDoc, parsed.sourceAnswerKeyDoc);
-              }
-              this.cache.set(parsed.id, parsed);
+            } catch (e) {
+              console.error(`[AnswerKeyService] Failed to load key file ${file}:`, e);
             }
-          } catch (e) {
-            console.error(`[AnswerKeyService] Failed to load key file ${file}:`, e);
           }
         }
+      } catch (err) {
+        console.warn(`[AnswerKeyService] Warning scanning dir ${dir}:`, err);
       }
-    } catch (err) {
-      console.error('[AnswerKeyService] Error loading answer keys from disk:', err);
     }
   }
 
   private saveToDisk(key: CanonicalAnswerKey): void {
     this.cache.set(key.id, key);
-    const filePath = path.join(this.storageDir, `${key.id}.json`);
-    const tmpPath = `${filePath}.${Date.now()}.${crypto.randomBytes(4).toString('hex')}.tmp`;
     if (!key.questionPaperFingerprint && key.sourceQuestionPaperDoc) {
       key.questionPaperFingerprint = computeQuestionPaperFingerprint(key.sourceQuestionPaperDoc);
     }
     if (!key.referencePairHash && key.sourceQuestionPaperDoc && key.sourceAnswerKeyDoc) {
       key.referencePairHash = computeReferencePairHash(key.sourceQuestionPaperDoc, key.sourceAnswerKeyDoc);
     }
-    fs.writeFileSync(tmpPath, JSON.stringify(key, null, 2), 'utf-8');
+
     try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+      if (!fs.existsSync(this.storageDir)) {
+        fs.mkdirSync(this.storageDir, { recursive: true });
       }
-    } catch {}
-    fs.renameSync(tmpPath, filePath);
+      const filePath = path.join(this.storageDir, `${key.id}.json`);
+      const tmpPath = `${filePath}.${Date.now()}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+      fs.writeFileSync(tmpPath, JSON.stringify(key, null, 2), 'utf-8');
+      try {
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      } catch {}
+      fs.renameSync(tmpPath, filePath);
+    } catch (err) {
+      console.warn('[AnswerKeyService] Could not write key to disk (read-only filesystem). Key kept in memory cache:', err);
+    }
   }
 
   /**

@@ -93,14 +93,31 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// Mount dedicated backend routes
+// Normalize Netlify serverless function path rewrites
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  if (req.url.startsWith('/.netlify/functions/api')) {
+    const sub = req.url.substring('/.netlify/functions/api'.length) || '/';
+    req.url = sub.startsWith('/api') || sub.startsWith('/health') ? sub : `/api${sub.startsWith('/') ? '' : '/'}${sub}`;
+  } else if (req.url.startsWith('/netlify/functions/api')) {
+    const sub = req.url.substring('/netlify/functions/api'.length) || '/';
+    req.url = sub.startsWith('/api') || sub.startsWith('/health') ? sub : `/api${sub.startsWith('/') ? '' : '/'}${sub}`;
+  }
+  next();
+});
+
+// Mount dedicated backend routes (with both /api and direct aliases for serverless flexibility)
 app.use(healthRouter);
+app.use('/health', healthRouter);
 app.use('/api/health', healthRouter);
+
+app.use('/evaluations', evaluationsRouter);
 app.use('/api/evaluations', evaluationsRouter);
+
+app.use('/answer-keys', answerKeysRouter);
 app.use('/api/answer-keys', answerKeysRouter);
 
 // Explicit 404 handler for unmatched API routes
-app.use('/api', (req: Request, res: Response) => {
+app.use(['/api', '/.netlify/functions/api', '/netlify/functions/api'], (req: Request, res: Response) => {
   res.status(404).setHeader('Content-Type', 'application/json').json({
     error: `API endpoint not found: ${req.method} ${req.originalUrl || req.path}`,
     category: 'Not Found',

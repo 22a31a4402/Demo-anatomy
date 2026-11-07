@@ -32,7 +32,19 @@ export const config = {
   // Cache TTL: 7 days
   cacheTtlMs: 7 * 24 * 60 * 60 * 1000,
   // Persistent data directory (uses /tmp on serverless environments like Netlify / Lambda)
-  dataDir: process.env.DATA_DIR || (process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME ? '/tmp/.data/evaluations' : './.data/evaluations'),
+  dataDir: (() => {
+    if (process.env.DATA_DIR) return process.env.DATA_DIR;
+    if (
+      process.env.NETLIFY ||
+      process.env.AWS_LAMBDA_FUNCTION_NAME ||
+      process.env.LAMBDA_TASK_ROOT ||
+      process.env.AWS_EXECUTION_ENV ||
+      process.env.VERCEL
+    ) {
+      return '/tmp/.data/evaluations';
+    }
+    return './.data/evaluations';
+  })(),
   // Environment
   isProduction: process.env.NODE_ENV === 'production',
   // Server-Side Authentication Keys (Distinct from GEMINI_API_KEY)

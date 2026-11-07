@@ -1,0 +1,71 @@
+{
+  "id": "ak_1794029055747_fa2b97509475",
+  "examId": "exam_1794029055748",
+  "title": "World Literature & Historiography",
+  "subject": "Languages & Humanities",
+  "grade": "University Undergraduate",
+  "sourceMode": "ai_generated",
+  "version": 1,
+  "status": "draft",
+  "printedMaxMarks": 10,
+  "totalMaxMarks": 10,
+  "marksValidation": {
+    "hasDiscrepancy": false,
+    "printedMaxMarks": 10,
+    "calculatedTotalMarks": 10,
+    "difference": 0,
+    "discrepancyMessages": [],
+    "offendingQuestions": [],
+    "sectionTotals": {
+      "General": 10
+    },
+    "sections": [
+      {
+        "sectionName": "General",
+        "questionCount": 1,
+        "calculatedTotalMarks": 10
+      }
+    ],
+    "ambiguousChoices": [],
+    "hasAmbiguousChoices": false,
+    "selectionRules": []
+  },
+  "selectionRules": [],
+  "questions": [
+    {
+      "questionId": "1",
+      "isAlternative": false,
+      "isParentHeader": false,
+      "questionText": "Analyze ambition in Macbeth and socioeconomic causes of French Revolution",
+      "maxMarks": 10,
+      "referenceAnswer": "Authoritative model answer for World Literature & Historiography respecting subject conventions.",
+      "expectedConcepts": [
+        "Core Concept 1",
+        "Core Concept 2"
+      ],
+      "acceptableAlternatives": [
+        "Alternative phrasing or method"
+      ],
+      "markingCriteria": [
+        "5 marks for theoretical foundation",
+        "5 marks for accurate technical execution"
+      ],
+      "diagramReferences": [],
+      "confidence": 0.98
+    }
+  ],
+  "metadata": {
+    "institutionId": "inst_validation",
+    "createdBy": "prof_validator",
+    "createdAt": 1794029055748,
+    "updatedAt": 1794029055748,
+    "sourceDocName": "QP_Languages___Humanities.pdf"
+  },
+  "questionPaperFingerprint": "35df267bb588908e0ad1e5be88f3cdbfde39f5bb843083815095110546d9ab96",
+  "sourceQuestionPaperDoc": {
+    "name": "QP_Languages___Humanities.pdf",
+    "text": "Analyze ambition in Macbeth and socioeconomic causes of French Revolution",
+    "base64": "B64_DATA",
+    "mimeType": "application/pdf"
+  }
+}
