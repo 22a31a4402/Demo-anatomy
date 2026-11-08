@@ -37,7 +37,9 @@ import {
   X,
   ArrowUp,
   ArrowDown,
-  GripVertical
+  GripVertical,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 const pdfjs: any = pdfjsLib;
@@ -174,6 +176,24 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
     { id: 'group-1', name: 'Queue Batch 1', questionPaperFile: null, answerKeyFile: null }
   ]);
   const [activeGroupId, setActiveGroupId] = useState<string>('group-1');
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll active queue tab into view when activeGroupId changes
+  useEffect(() => {
+    if (tabsContainerRef.current) {
+      const activeEl = tabsContainerRef.current.querySelector(`[data-group-id="${activeGroupId}"]`) as HTMLElement;
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+    }
+  }, [activeGroupId]);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    if (tabsContainerRef.current) {
+      const scrollAmount = direction === 'left' ? -260 : 260;
+      tabsContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   // Active group derived files helper
   const activeGroup = queueGroups.find(g => g.id === activeGroupId) || queueGroups[0];
@@ -869,13 +889,11 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
   };
 
   const handleClearQueue = () => {
-    if (confirm("Reset current batch queue and uploaded student sheets?")) {
-      setQueue(prev => prev.filter(item => item.queueGroupId !== activeGroupId));
-      setIsBatchRunning(false);
-      setHasActiveCycleStarted(false);
-      setCurrentQueueIndex(-1);
-      setCurrentActionLog("");
-    }
+    setQueue(prev => prev.filter(item => item.queueGroupId !== activeGroupId));
+    setIsBatchRunning(false);
+    setHasActiveCycleStarted(false);
+    setCurrentQueueIndex(-1);
+    setCurrentActionLog("Reset current batch queue and uploaded student sheets.");
   };
 
   const handleUpdateGroupName = (groupId: string, newName: string) => {
@@ -883,22 +901,35 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
   };
 
   const handleRemoveGroup = (groupId: string) => {
+    const targetGroup = queueGroups.find(g => g.id === groupId);
+    const targetName = targetGroup?.name || 'Queue';
+
     if (queueGroups.length <= 1) {
-      alert("At least one queue batch must remain.");
+      // If only one group remains, reset it to an empty default queue instead of blocking
+      setQueueGroups([{
+        id: crypto.randomUUID(),
+        name: 'Queue Batch 1',
+        questionPaperFile: null,
+        answerKeyFile: null
+      }]);
+      setQueue(prev => prev.filter(item => item.queueGroupId !== groupId));
+      setCurrentActionLog(`Reset ${targetName} to a fresh queue.`);
       return;
     }
-    if (confirm("Are you sure you want to delete this Entire Queue Batch? This will remove all of its student scripts.")) {
-      // 1. Filter out the group
-      setQueueGroups(prev => prev.filter(g => g.id !== groupId));
-      // 2. Filter out its items from global queue
-      setQueue(prev => prev.filter(item => item.queueGroupId !== groupId));
-      
-      // If we are deleting the active group, switch to another group
-      if (activeGroupId === groupId) {
-        const remaining = queueGroups.filter(g => g.id !== groupId);
-        setActiveGroupId(remaining[0].id);
-      }
+
+    // 1. Filter out the group
+    const remaining = queueGroups.filter(g => g.id !== groupId);
+    setQueueGroups(remaining);
+
+    // 2. Filter out its items from global queue
+    setQueue(prev => prev.filter(item => item.queueGroupId !== groupId));
+    
+    // 3. Switch active group to a remaining one if active is deleted
+    if (activeGroupId === groupId) {
+      setActiveGroupId(remaining[0].id);
     }
+
+    setCurrentActionLog(`Deleted ${targetName}.`);
   };
 
   const handleRemoveItem = (id: string) => {
@@ -1266,68 +1297,128 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
       </p>
 
       {/* Queue Groups Manager Tabs */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none flex-1">
-          {queueGroups.map((group) => {
-            const isSelected = group.id === activeGroupId;
-            const bgClass = isSelected ? 'bg-red-600 text-white shadow-md shadow-red-600/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
-            return (
-              <div key={group.id} className="flex items-center gap-1 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setActiveGroupId(group.id)}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${bgClass}`}
-                >
-                  <span>{group.name}</span>
-                  <span className="bg-black/10 text-current px-2 py-0.5 rounded-md text-[10px] font-extrabold">
-                    {queue.filter(item => item.queueGroupId === group.id).length}
-                  </span>
-                </button>
-              </div>
-            );
-          })}
-          
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 w-full min-w-0 max-w-full">
+        {/* Scrollable Tabs Container with Controls */}
+        <div className="flex items-center min-w-0 flex-1 w-full gap-2">
+          {/* Scroll Left Button */}
           <button
-            onClick={() => {
-              const newId = crypto.randomUUID();
-              const newNum = queueGroups.length + 1;
-              setQueueGroups(prev => [
-                ...prev,
-                {
-                  id: newId,
-                  name: `Queue Batch ${newNum}`,
-                  questionPaperFile: null,
-                  answerKeyFile: null
-                }
-              ]);
-              setActiveGroupId(newId);
-              setCurrentActionLog(`Created new batch: Queue Batch ${newNum}`);
-            }}
-            className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+            type="button"
+            onClick={() => scrollTabs('left')}
+            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-600 shrink-0 transition-colors cursor-pointer flex items-center justify-center border border-slate-200/60 shadow-xs"
+            title="Scroll batches left"
+            aria-label="Scroll batches left"
           >
-            <Plus className="w-4 h-4" /> Add New Queue
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          {/* Horizontal Scroll Track */}
+          <div 
+            ref={tabsContainerRef}
+            onWheel={(e) => {
+              if (tabsContainerRef.current && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                tabsContainerRef.current.scrollLeft += e.deltaY;
+              }
+            }}
+            tabIndex={0}
+            aria-label="Queue Batch Tabs"
+            className="flex items-center gap-2 overflow-x-auto overflow-y-hidden py-1 px-1 min-w-0 flex-1 scroll-smooth focus:outline-none [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-400"
+          >
+            {queueGroups.map((group) => {
+              const isSelected = group.id === activeGroupId;
+              const bgClass = isSelected ? 'bg-red-600 text-white shadow-md shadow-red-600/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+              return (
+                <div key={group.id} data-group-id={group.id} className="flex items-center gap-1 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setActiveGroupId(group.id)}
+                    className={`px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${bgClass}`}
+                  >
+                    <span>{group.name}</span>
+                    <span className="bg-black/10 text-current px-2 py-0.5 rounded-md text-[10px] font-extrabold">
+                      {queue.filter(item => item.queueGroupId === group.id).length}
+                    </span>
+                    {queueGroups.length > 1 && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveGroup(group.id);
+                        }}
+                        className="ml-1 -mr-1 p-0.5 rounded-md hover:bg-black/20 text-current opacity-70 hover:opacity-100 transition-opacity"
+                        title={`Delete ${group.name}`}
+                        aria-label={`Delete ${group.name}`}
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </span>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+            
+            <button
+              type="button"
+              onClick={() => {
+                const newId = crypto.randomUUID();
+                const newNum = queueGroups.length + 1;
+                setQueueGroups(prev => [
+                  ...prev,
+                  {
+                    id: newId,
+                    name: `Queue Batch ${newNum}`,
+                    questionPaperFile: null,
+                    answerKeyFile: null
+                  }
+                ]);
+                setActiveGroupId(newId);
+                setCurrentActionLog(`Created new batch: Queue Batch ${newNum}`);
+                setTimeout(() => {
+                  if (tabsContainerRef.current) {
+                    tabsContainerRef.current.scrollTo({ left: tabsContainerRef.current.scrollWidth, behavior: 'smooth' });
+                  }
+                }, 50);
+              }}
+              className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shrink-0 cursor-pointer whitespace-nowrap shadow-xs"
+            >
+              <Plus className="w-4 h-4" /> Add New Queue
+            </button>
+          </div>
+
+          {/* Scroll Right Button */}
+          <button
+            type="button"
+            onClick={() => scrollTabs('right')}
+            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-600 shrink-0 transition-colors cursor-pointer flex items-center justify-center border border-slate-200/60 shadow-xs"
+            title="Scroll batches right"
+            aria-label="Scroll batches right"
+          >
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
         {/* Selected group controls (Rename / Delete) */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 md:pl-2 md:border-l md:border-slate-200">
           <input 
             type="text" 
-            value={activeGroup.name}
+            value={activeGroup ? activeGroup.name : ''}
             onChange={(e) => handleUpdateGroupName(activeGroupId, e.target.value)}
             placeholder="Rename active batch..."
-            className="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-red-500 w-44"
+            className="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-red-500 w-36 sm:w-44"
             title="Edit current batch display name"
           />
-          {queueGroups.length > 1 && (
-            <button
-              onClick={() => handleRemoveGroup(activeGroupId)}
-              className="p-2.5 bg-red-50 text-red-600 border border-red-100 rounded-xl hover:bg-red-100 transition-colors cursor-pointer"
-              title="Delete Active Batch Queue"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => handleRemoveGroup(activeGroupId)}
+            className="p-2.5 bg-red-50 text-red-600 border border-red-200 rounded-xl hover:bg-red-600 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+            title={queueGroups.length > 1 ? `Delete ${activeGroup?.name || 'Queue'}` : "Reset Queue Batch"}
+            aria-label={queueGroups.length > 1 ? `Delete ${activeGroup?.name || 'Queue'}` : "Reset Queue Batch"}
+          >
+            <Trash2 className="w-4 h-4" />
+            <span className="text-xs font-bold hidden sm:inline">
+              {queueGroups.length > 1 ? 'Delete Queue' : 'Reset Queue'}
+            </span>
+          </button>
         </div>
       </div>
 
