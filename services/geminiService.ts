@@ -176,10 +176,12 @@ export const generateStructuredFeedback = async (
   onProgress?.(5, 'Submitting answer sheet to evaluation backend...');
 
   // 1. Initiate evaluation job on the dedicated backend with authentication
-  const createRes = await fetch(`${API_BASE}/api/evaluations`, {
+  // Request synchronous execution so serverless environments (Netlify, AWS Lambda) don't freeze background containers
+  const createRes = await fetch(`${API_BASE}/api/evaluations?sync=true`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'x-eval-sync': 'true',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
@@ -192,7 +194,15 @@ export const generateStructuredFeedback = async (
     );
   }
 
-  const { jobId } = await safeParseResponseJson<{ jobId: string }>(createRes, 'Evaluation Job Creation');
+  const createData = await safeParseResponseJson<any>(createRes, 'Evaluation Job Creation');
+
+  // If the server evaluated synchronously (Netlify serverless mode), return the completed report immediately
+  if (createData.status === 'completed' && createData.report) {
+    onProgress?.(100, 'Evaluation complete and verified!');
+    return createData.report;
+  }
+
+  const jobId = createData.jobId;
   if (!jobId) {
     throw new Error('Invalid server response: No job ID returned by evaluation backend.');
   }
@@ -205,6 +215,7 @@ export const generateStructuredFeedback = async (
     let sseSource: EventSource | null = null;
     let pollInterval: any = null;
     let watchdogInterval: any = null;
+    let consecutive404Count = 0;
 
     let lastActiveTimestamp = Date.now();
     const pollingStart = Date.now();
@@ -251,15 +262,22 @@ export const generateStructuredFeedback = async (
         });
         if (!res.ok) {
           if (res.status === 404) {
-            settleFailure(new Error(`Evaluation job ${jobId} not found on server.`));
+            consecutive404Count++;
+            // Allow several retries in case of multi-container routing or storage propagation latency
+            if (consecutive404Count >= 6) {
+              settleFailure(new Error(`Evaluation job ${jobId} not found on server.`));
+            }
             return;
           }
+          consecutive404Count = 0;
           if (res.status === 401 || res.status === 403) {
             settleFailure(new Error('Unauthorized: Session expired or invalid authentication.'));
             return;
           }
           return;
         }
+
+        consecutive404Count = 0;
 
         // Successfully received status from backend: refresh active timestamp
         lastActiveTimestamp = Date.now();

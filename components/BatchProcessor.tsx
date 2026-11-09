@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { generateStructuredFeedback, parseActionableError, EvaluationMode } from '../services/geminiService';
 import { EvaluationReport, FileData, QuestionFeedback, GeneralFeedbackSection, HistoryItem } from '../types';
 import { fileToPdfBytes, mergePdfs, downloadBytes } from '../services/pdfMerger';
-import { safeFileToBase64, safeFileToBytes } from '../services/fileUtils';
+import { safeFileToBase64, safeFileToBytes, optimizePdfForEvaluation } from '../services/fileUtils';
 import { saveFilesToDB } from '../services/fileStorage';
 import { saveReportToDB } from '../services/reportStorage';
 import FeedbackReport from './FeedbackReport';
@@ -572,15 +572,21 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
       }
 
       // Convert student's actual file to base64 for multimodal analysis (prioritize cached buffer to eliminate stale file handles)
-      const studentBase64 = item.cachedBase64 || await safeFileToBase64(item.file);
-      if (!item.cachedBase64) {
+      // Automatically optimize oversized PDFs (e.g. 7-15MB phone scans) so payloads stay within Netlify's 6MB payload limit
+      let studentBase64 = item.cachedBase64;
+      let studentMime = item.file.type || 'application/pdf';
+      if (!studentBase64) {
+        setCurrentActionLog(`Optimizing student script for AI evaluation...`);
+        const optimized = await optimizePdfForEvaluation(item.file);
+        studentBase64 = optimized.base64;
+        studentMime = optimized.mimeType;
         item.cachedBase64 = studentBase64;
       }
 
       const sourceDocPayload: FileData = {
         text: studentText,
         base64: studentBase64,
-        mimeType: item.file.type || 'application/pdf',
+        mimeType: studentMime,
         name: item.file.name,
         isDocx: false
       };

@@ -26,7 +26,7 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, Footer, PageNumber, NumberFormat } from 'docx';
 import { fileToPdfBytes, mergePdfs, downloadBytes } from './services/pdfMerger';
 import { generateEvaluationPdf, downloadEvaluationPdf } from './services/evaluationPdf';
-import { safeFileToBase64 } from './services/fileUtils';
+import { safeFileToBase64, optimizePdfForEvaluation } from './services/fileUtils';
 import { extractStudentNameFromFile } from './services/filenameParser';
 import { saveFilesToDB, getFilesFromDB, deleteFilesFromDB } from './services/fileStorage';
 import { saveReportToDB, getReportFromDB, deleteReportFromDB } from './services/reportStorage';
@@ -491,7 +491,7 @@ const App: React.FC = () => {
     
     if (isPdf) {
       setLoadingStep(`Processing PDF: ${file.name}`);
-      const base64 = await safeFileToBase64(file);
+      const { base64, mimeType } = await optimizePdfForEvaluation(file);
 
       let text = '';
       try {
@@ -502,7 +502,7 @@ const App: React.FC = () => {
 
       return {
         base64,
-        mimeType: file.type || 'application/pdf',
+        mimeType: mimeType || file.type || 'application/pdf',
         text: text || undefined,
         name: file.name,
         isDocx: false

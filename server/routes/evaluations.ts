@@ -15,6 +15,8 @@ import { EvaluationJob, EvaluationMode, CanonicalAnswerKey } from '../types';
 import { requireAuth, requireRole, verifyJobAccess, UserContext, checkEvaluationRateLimit } from '../auth';
 import { usageLedger } from '../usageLedger';
 import { answerKeyService } from '../answerKeyService';
+import { evaluationEngine } from '../evaluator';
+import { evaluationMetadataService } from '../evaluationMetadata';
 import { config } from '../config';
 
 export const evaluationsRouter = Router();
@@ -58,7 +60,7 @@ function validateDocumentPayload(doc: any, fieldName: string): string | null {
  * POST /api/evaluations
  * Create & enqueue a new evaluation job
  */
-evaluationsRouter.post('/', (req: Request, res: Response): void => {
+evaluationsRouter.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const user = (req as any).user as UserContext;
 
@@ -196,6 +198,60 @@ evaluationsRouter.post('/', (req: Request, res: Response): void => {
       },
       user
     );
+
+    // In serverless environments (Netlify, AWS Lambda) or when requested via sync query/header,
+    // execute evaluation synchronously within the request so background containers aren't frozen
+    // and polling across different serverless instances isn't required.
+    const isServerless = Boolean(
+      process.env.NETLIFY ||
+      process.env.AWS_LAMBDA_FUNCTION_NAME ||
+      process.env.LAMBDA_TASK_ROOT ||
+      process.env.AWS_EXECUTION_ENV ||
+      process.env.VERCEL
+    );
+    const preferSync = req.query.sync === 'true' || req.headers['x-eval-sync'] === 'true' || isServerless;
+
+    if (preferSync) {
+      try {
+        console.log(`[evaluationsRouter] Running direct synchronous evaluation for ${job.studentName} (${job.id})...`);
+        const report = await evaluationEngine.evaluate(job);
+        job.report = report;
+        job.status = 'completed';
+        job.progressPercent = 100;
+        job.currentStepMessage = 'Evaluation complete and verified';
+        job.updatedAt = Date.now();
+
+        try {
+          evaluationMetadataService.generateMetadata(job);
+        } catch {}
+
+        res.status(200).json({
+          jobId: job.id,
+          correlationId: job.correlationId,
+          status: 'completed',
+          progressPercent: 100,
+          currentStepMessage: 'Evaluation complete and verified',
+          report,
+          links: {
+            status: `/api/evaluations/${job.id}`,
+            results: `/api/evaluations/${job.id}/results`,
+          },
+        });
+        return;
+      } catch (evalErr: any) {
+        console.error(`[evaluationsRouter] Direct evaluation failed for ${job.id}:`, evalErr);
+        job.status = evalErr?.name === 'ValidationError' ? 'needs_review' : 'failed';
+        job.error = evalErr?.message || 'Evaluation failed on backend';
+        res.status(evalErr?.statusCode || (evalErr?.name === 'ValidationError' ? 422 : 500)).json({
+          jobId: job.id,
+          correlationId: job.correlationId,
+          status: job.status,
+          error: job.error,
+          category: evalErr?.name || 'Evaluation Failure',
+        });
+        return;
+      }
+    }
 
     res.status(202).json({
       jobId: job.id,

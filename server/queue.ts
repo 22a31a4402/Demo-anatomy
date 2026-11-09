@@ -211,7 +211,24 @@ export class EvaluationQueue extends EventEmitter {
   }
 
   public getJob(id: string): EvaluationJob | undefined {
-    return this.jobs.get(id);
+    let job = this.jobs.get(id);
+    if (!job) {
+      try {
+        const filePath = path.join(this.queueDir, `${id}.json`);
+        if (fs.existsSync(filePath)) {
+          const raw = fs.readFileSync(filePath, 'utf-8');
+          if (raw && raw.trim().length > 0) {
+            job = JSON.parse(raw);
+            if (job && job.id) {
+              this.jobs.set(id, job);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn(`[EvaluationQueue] Disk read fallback for job ${id}:`, err);
+      }
+    }
+    return job;
   }
 
   public getAllJobs(userContext?: UserContext): EvaluationJob[] {
