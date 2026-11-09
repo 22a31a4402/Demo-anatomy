@@ -17,7 +17,6 @@
 
 [functions]
   node_bundler = "esbuild"
-  timeout = 26
   external_node_modules = ["vite", "@vitejs/plugin-react", "@tailwindcss/vite", "lightningcss", "esbuild", "tsx"]
   included_files = [".data/**"]
 
