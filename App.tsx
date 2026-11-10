@@ -1549,7 +1549,7 @@ const App: React.FC = () => {
       <footer className="max-w-4xl mx-auto px-4 pb-10 no-print">
         <div className="p-4 bg-slate-100 rounded-xl border border-slate-200 text-center">
           <p className="text-slate-500 text-xs font-medium">
-            <span className="font-bold text-slate-700">NOTE:</span> Ensure the files are in pdf or docx format only and file size is strictly &lt;= 20mb
+            <span className="font-bold text-slate-700">NOTE:</span> Ensure the files are in pdf or docx format only and file size is strictly &lt;= 25mb
           </p>
         </div>
       </footer>

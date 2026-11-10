@@ -282,12 +282,16 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
         return [...prev, ...filtered];
       });
 
-      // Eagerly pre-cache in-memory base64 and bytes while OS file descriptors are fresh
+      // Eagerly pre-cache optimized base64 for evaluation (staying safely under Netlify 6MB gateway limit)
+      // and raw bytes for pristine 4-in-1 PDF booklet generation
       newItems.forEach((item) => {
-        safeFileToBase64(item.file).then((b64) => {
-          setQueue((prev) => prev.map((q) => (q.id === item.id ? { ...q, cachedBase64: b64 } : q)));
+        optimizePdfForEvaluation(item.file).then((opt) => {
+          setQueue((prev) => prev.map((q) => (q.id === item.id ? { ...q, cachedBase64: opt.base64 } : q)));
         }).catch((err) => {
-          console.warn(`[BatchProcessor] Pre-caching base64 failed for ${item.studentName}:`, err);
+          console.warn(`[BatchProcessor] Optimization pre-cache failed for ${item.studentName}, falling back to safeFileToBase64:`, err);
+          safeFileToBase64(item.file).then((b64) => {
+            setQueue((prev) => prev.map((q) => (q.id === item.id ? { ...q, cachedBase64: b64 } : q)));
+          }).catch(() => {});
         });
 
         safeFileToBytes(item.file).then((bytes) => {
@@ -572,10 +576,11 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
       }
 
       // Convert student's actual file to base64 for multimodal analysis (prioritize cached buffer to eliminate stale file handles)
-      // Automatically optimize oversized PDFs (e.g. 7-15MB phone scans) so payloads stay within Netlify's 6MB payload limit
+      // Automatically optimize oversized PDFs (up to 25MB phone scans) so payloads stay strictly within Netlify's 6MB payload limit
       let studentBase64 = item.cachedBase64;
       let studentMime = item.file.type || 'application/pdf';
-      if (!studentBase64) {
+      const isOversized = Boolean(studentBase64 && studentBase64.length > 3.0 * 1024 * 1024);
+      if (!studentBase64 || isOversized) {
         setCurrentActionLog(`Optimizing student script for AI evaluation...`);
         const optimized = await optimizePdfForEvaluation(item.file);
         studentBase64 = optimized.base64;
@@ -1835,9 +1840,9 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
                                           setQueue(prev => prev.map(q => q.id === item.id ? { ...q, status: 'pending', error: undefined, countdown: 0 } : q));
                                           setIsBatchRunning(true);
                                           try {
-                                            if (!item.cachedBase64) {
-                                              const b64 = await safeFileToBase64(item.file);
-                                              item.cachedBase64 = b64;
+                                            if (!item.cachedBase64 || item.cachedBase64.length > 3.0 * 1024 * 1024) {
+                                              const opt = await optimizePdfForEvaluation(item.file);
+                                              item.cachedBase64 = opt.base64;
                                             }
                                           } catch (_) {}
                                           processQueueItem(idx);
@@ -1862,12 +1867,12 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
                                             const newFile = e.target.files?.[0];
                                             if (newFile) {
                                               try {
-                                                const b64 = await safeFileToBase64(newFile);
+                                                const opt = await optimizePdfForEvaluation(newFile);
                                                 const bytes = await safeFileToBytes(newFile);
                                                 setQueue(prev => prev.map(q => q.id === item.id ? {
                                                   ...q,
                                                   file: newFile,
-                                                  cachedBase64: b64,
+                                                  cachedBase64: opt.base64,
                                                   cachedPdfBytes: bytes,
                                                   status: 'pending',
                                                   error: undefined,

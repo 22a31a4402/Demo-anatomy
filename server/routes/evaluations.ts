@@ -27,10 +27,13 @@ evaluationsRouter.use(requireAuth);
 const ALLOWED_MIME_TYPES = [
   'application/pdf',
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/webp',
   'text/plain',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/msword',
+  'application/octet-stream',
 ];
 
 function validateDocumentPayload(doc: any, fieldName: string): string | null {
@@ -38,7 +41,8 @@ function validateDocumentPayload(doc: any, fieldName: string): string | null {
   if (typeof doc !== 'object') {
     return `${fieldName} must be an object.`;
   }
-  if (doc.mimeType && !ALLOWED_MIME_TYPES.includes(String(doc.mimeType).toLowerCase())) {
+  const cleanMime = doc.mimeType ? String(doc.mimeType).split(';')[0].trim().toLowerCase() : '';
+  if (cleanMime && !ALLOWED_MIME_TYPES.includes(cleanMime)) {
     return `${fieldName} has unsupported MIME type: '${doc.mimeType}'. Allowed formats: PDF, JPEG, PNG, WebP, plain text, DOCX.`;
   }
   if (doc.name && typeof doc.name !== 'string') {
