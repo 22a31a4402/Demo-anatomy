@@ -2228,7 +2228,6 @@ const BatchProcessor: React.FC<BatchProcessorProps> = ({ onBack, onAddHistoryIte
           </div>
         );
       })()}
-
     </div>
   );
 };

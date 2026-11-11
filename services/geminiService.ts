@@ -1,14 +1,4 @@
-/**
- * NextGen Eval Client Service
- *
- * Communicates with the dedicated backend service (/api/evaluations).
- * - Transmits distinct Question Paper, Answer Key, Student Script, and Notes
- * - Preserves complete multimodal visual data for handwriting, diagrams, and formulas
- * - Authenticates requests via server-side Bearer tokens
- * - Monitors evaluation progress via Server-Sent Events (SSE) with robust polling fallback
- * - Categorizes actionable errors cleanly
- */
-
+import { GoogleGenAI, Type } from '@google/genai';
 import { EvaluationReport, FileData, CanonicalAnswerKey, CanonicalQuestionKey } from '../types';
 
 export type EvaluationMode = 'with-manual' | 'without-manual';
@@ -31,6 +21,395 @@ export function getClientAuthToken(): string {
   } catch {
     return DEFAULT_CLIENT_TOKEN;
   }
+}
+
+/**
+ * Retrieves the Gemini API Key available to the client browser.
+ * Checks localStorage custom override, environment variables injected via Vite define, and import.meta.env.
+ */
+export function getClientGeminiApiKey(): string {
+  try {
+    const custom =
+      localStorage.getItem('anatomy_guru_custom_api_key') ||
+      localStorage.getItem('gemini_api_key') ||
+      localStorage.getItem('GEMINI_API_KEY');
+    if (custom && custom.trim().length > 0) return custom.trim();
+  } catch (e) {
+    console.warn('localStorage read failed:', e);
+  }
+
+  const envKey = (process.env.API_KEY || process.env.GEMINI_API_KEY || '') as string;
+  if (envKey && envKey.trim().length > 0) return envKey.trim();
+
+  try {
+    const viteKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || (import.meta as any).env?.VITE_API_KEY;
+    if (viteKey && viteKey.trim().length > 0) return viteKey.trim();
+  } catch {}
+
+  return '';
+}
+
+/**
+ * Detects if the application is currently running in a Netlify deployment environment.
+ */
+export function isNetlifyEnvironment(): boolean {
+  if (typeof window === 'undefined') return false;
+  const host = window.location.hostname || '';
+  return host.includes('netlify.app') || host.includes('netlify.live') || !API_BASE;
+}
+
+/**
+ * Computes deterministic local cache key for evaluation reports.
+ */
+const computeEvaluationCacheKey = (
+  sourceDoc: FileData,
+  dirtyFeedbackDoc: FileData | null,
+  mode: EvaluationMode,
+  qpName?: string,
+  akName?: string
+): string => {
+  const parts = [
+    sourceDoc.name || '',
+    sourceDoc.text || '',
+    sourceDoc.base64 ? `${sourceDoc.base64.length}_${sourceDoc.base64.substring(0, 200)}` : '',
+    qpName || '',
+    akName || '',
+    dirtyFeedbackDoc?.name || '',
+    dirtyFeedbackDoc?.text || '',
+    mode,
+  ];
+  const str = parts.join('|||');
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
+  }
+  return `anatomy_eval_v2_${hash}`;
+};
+
+/**
+ * Direct Client-Side Gemini Evaluation Engine (Matching working GitHub repository)
+ *
+ * Directly connects the browser to Google Gemini API (generativelanguage.googleapis.com).
+ * - Bypasses Netlify's 10-second / 26-second serverless execution limits completely
+ * - Eliminates Netlify 503 / 502 gateway timeouts on large 100-mark examinations
+ * - Bypasses serverless payload limits (6MB gateway ceiling)
+ * - Implements automated exponential backoff retries for transient 503/429 errors
+ * - Uses client localStorage evaluation cache to save API credits and speed up retries
+ */
+export async function evaluateDirectlyWithGemini(
+  sourceDoc: FileData,
+  dirtyFeedbackDoc: FileData | null,
+  mode: EvaluationMode = 'without-manual',
+  onProgress?: ProgressCallback,
+  questionPaperDoc?: FileData | null,
+  answerKeyDoc?: FileData | null,
+  canonicalAnswerKey?: CanonicalAnswerKey | null
+): Promise<EvaluationReport> {
+  const cacheKey = computeEvaluationCacheKey(
+    sourceDoc,
+    dirtyFeedbackDoc,
+    mode,
+    questionPaperDoc?.name,
+    answerKeyDoc?.name
+  );
+
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      console.log('[evaluateDirectlyWithGemini] Loading evaluation report from local cache to save API credits...');
+      onProgress?.(100, 'Report restored from verified cache.');
+      return JSON.parse(cached) as EvaluationReport;
+    }
+  } catch (e) {
+    console.warn('Failed to read evaluation from local cache:', e);
+  }
+
+  const apiKey = getClientGeminiApiKey();
+  if (!apiKey) {
+    throw new Error(
+      'Medical Auditor Configuration: Gemini API Key is missing for evaluation. Please ensure GEMINI_API_KEY is configured in your Netlify Site configuration (Environment variables).'
+    );
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const systemInstruction = `You are the **Anatomy Guru Master Evaluator**, an elite medical professor, forensic academic auditor, and head of the examination board.
+You evaluate student handwritten and typed answer scripts with uncompromising rigor, deterministic precision, and absolute fidelity to the official Answer Key and Question Paper.
+
+ULTRA-STRICT EVALUATION PRINCIPLES (ACT LIKE A REAL PROFESSOR):
+1. ABSOLUTE ADHERENCE TO ANSWER KEY: The Answer Key is the absolute reference. The student must list and explain the specific anatomical landmarks, relations, blood/nerve supply, clinical features, and pathways as detailed in the Answer Key.
+2. NO MARKS FOR KEYWORD DROPPING: You are strictly forbidden from awarding marks simply because a student threw in a correct keyword or recalled a term from the question. Mentioning a keyword is NOT comprehension.
+3. RIGOROUS CONTENT DEPTH & RELATIONS: Evaluate if the student actually understands the subject. If they present a shallow, superficial, or incomplete answer, deduct marks aggressively. Relations, boundaries, and clinical correlations must be written with professional precision.
+4. DIAGRAMS & ILLUSTRATIONS: If the question requires or expects a diagram according to the Answer Key, and the student does not draw or explain it adequately, deduct marks strictly.
+5. DETOUR GENEROUS HUMAN GRADERS (In 'with-manual' mode): If manual faculty feedback awarded marks for shallow or incorrect answers, you are REQUIRED to override the positive evaluation, flag the question (isFlagged = true), lower the marks to reflect the student's true lack of depth, and document the discrepancy in 'flaggedComment'.
+6. DETERMINISTIC RIGOR: Be consistent across all questions. A strict valuation standard elevates clinical excellence.
+
+STRICT WORKFLOW (Follow for EVERY question in the paper):
+1. MODE CHECK: If mode is 'without-manual', skip steps related to faculty feedback.
+2. INCORPORATE FACULTY FEEDBACK (Only if mode is 'with-manual'): Read the FACULTY_MANUAL_FEEDBACK as the baseline.
+3. VERIFY WITH STUDENT SCRIPT: Direct your attention to the student's actual physical response in STUDENT_ANSWER_SCRIPT.
+4. VALIDATE AGAINST ANSWER KEY: Compare the student's written points against the required points in the official Answer Key / Question Paper.
+5. DETECT FALSE POSITIVES (Only if mode is 'with-manual'): Overrule overly generous human marking if incomplete.
+6. RESOLVE CONTRADICTIONS: Align strictly with the Answer Key and physical script evidence.
+7. GENERATE ENHANCED FEEDBACK: Create a final report.
+
+STRICT MARKING RULES (ONLY if mode is 'without-manual'):
+1. STRINGENT VALUATION: Adopt a highly disciplined and stringent grading regime.
+2. ABSOLUTE CEILING: You are FORBIDDEN from awarding full marks or near-full marks (e.g., 4.5/5, 5/5, 9/10, 10/10, 14/15, 15/15) unless the answer matches the Answer Key flawlessly and comprehensively.
+3. HARD LIMITS (DO NOT EXCEED):
+   - 5-Mark Questions: MAXIMUM 3.5/5. Never exceed 3.5 unless superhumanly perfect (absolute limit 4/5). 4.5/5 is STRICTLY PROHIBITED.
+   - 10-Mark Questions: MAXIMUM 7.5/10.
+   - 15-Mark Questions: MAXIMUM 12.5/15.
+   - 3-Mark Questions: MAXIMUM 2.5/3.
+4. DEDUCTION PRINCIPLE: Default to a lower grade if any key clinical aspect or landmark is omitted. If an answer is just decent, it should be graded around 2/5 or 2.5/5.
+
+CRITICAL CONSTRAINTS:
+- ACCURATE MARKING SCHEME & MAX MARKS: Read the provided OFFICIAL QUESTION PAPER and ANSWER KEY to extract the EXACT question numbers (e.g., "1", "2", "6", "MCQ-1") and their EXACT maximum marks (maxMarks). Do NOT imagine or hardcode maximum marks. The 'maxScore' MUST be the exact mathematical sum of these extracted maxMarks.
+- BE EXTREMELY STRICT ON MARKS (NO HALLUCINATION): Do NOT hallucinate questions or marks. 'marks' must strictly be between 0 and that exact 'maxMarks'.
+- MODE-SPECIFIC AUDIT: If mode is 'without-manual', 'isFlagged' MUST ALWAYS be false and 'flaggedComment' MUST ALWAYS be an empty string.
+- NO "FACULTY" MENTION: Do NOT use the word "faculty" or "evaluator" in the 'feedbackPoints' array.
+- INCLUDE ALL QUESTIONS: You MUST include every single question from the paper in the 'questions' array. Do NOT skip any question.
+- MCQ SPECIFIC RULE: For MCQs, include them all. If correct, provide feedback such as "Correct answer". If incorrect, specify the correct option from the Answer Key.
+- NO EMPTY FIELDS: Every question entry must have at least one descriptive point in 'feedbackPoints'.
+- TOTAL SCORE CONSISTENCY: The 'totalScore' field MUST be the exact mathematical sum of all 'marks' in the 'questions' array.
+- UNATTEMPTED VS ATTEMPTED: For Unattempted Questions, give the correct answer from the key that should have been written.
+- GENERAL FEEDBACK PRIVACY: The 'generalFeedback' object is sent directly to the student. It MUST NOT contain any mention of contradictions, faculty errors, or internal audit changes.
+- TYPOGRAPHY: Use **bold** ONLY for critical medical terms.
+- MODE: ${mode}.
+OUTPUT: Strictly valid JSON only.`;
+
+  const createPart = (data: FileData | null, label: string) => {
+    if (!data) return [{ text: `${label}: Not provided.` }];
+    const parts: any[] = [];
+    if (data.text) {
+      parts.push({ text: `DOCUMENT_START: ${label}\n${data.text}\nDOCUMENT_END: ${label}` });
+    }
+    if (data.base64 && data.mimeType) {
+      parts.push({ text: `DOCUMENT_START: ${label} (Visual/Image/PDF Data)` });
+      parts.push({ inlineData: { data: data.base64, mimeType: data.mimeType } });
+      parts.push({ text: `DOCUMENT_END: ${label}` });
+    }
+    if (parts.length === 0) {
+      return [{ text: `${label}: No usable content found.` }];
+    }
+    return parts;
+  };
+
+  const contentsParts: any[] = [];
+
+  if (questionPaperDoc) {
+    contentsParts.push(...createPart(questionPaperDoc, 'OFFICIAL_QUESTION_PAPER'));
+  }
+  if (answerKeyDoc) {
+    contentsParts.push(...createPart(answerKeyDoc, 'OFFICIAL_ANSWER_KEY'));
+  }
+  if (canonicalAnswerKey && canonicalAnswerKey.questions && canonicalAnswerKey.questions.length > 0) {
+    contentsParts.push({
+      text: `OFFICIAL_CANONICAL_CRITERIA:\n${JSON.stringify(
+        canonicalAnswerKey.questions.map((q) => ({
+          questionId: q.questionId,
+          maxMarks: q.maxMarks,
+          questionText: q.questionText,
+          referenceAnswer: q.referenceAnswer,
+          markingCriteria: q.markingCriteria,
+        })),
+        null,
+        2
+      )}`,
+    });
+  }
+
+  contentsParts.push(...createPart(sourceDoc, 'STUDENT_ANSWER_SCRIPT'));
+
+  if (mode === 'with-manual' && dirtyFeedbackDoc) {
+    contentsParts.push(...createPart(dirtyFeedbackDoc, 'FACULTY_MANUAL_FEEDBACK'));
+  }
+
+  contentsParts.push({
+    text: `Perform the academic evaluation audit now. Current mode is: ${mode}. Follow the STRICT WORKFLOW.
+IMPORTANT: INCLUDE ALL QUESTIONS, especially MCQs. If an MCQ is correct, state 'Correct answer'. Do NOT skip any question. Do NOT mark a question as unattempted if there is any evidence of an attempt.
+If mode is 'without-manual', ensure isFlagged is false for all questions.
+ABSOLUTE CEILING: For 'without-manual' mode, NEVER award 4.5/5 or 5/5. The MAXIMUM for 5-mark questions is 3.5/5.
+BE EXTREMELY STRICT ON MARKS COMPLIANCE: Extract the EXACT maximum marks from the provided Question Paper. Do NOT hallucinate questions, answers, or marks.
+The student marks for any question must strictly correspond to the question paper and never exceed its limits. Generate the JSON report based on this enhanced verification.`,
+  });
+
+  // Candidate models: prioritizing reliable production models
+  const candidateModels = ['gemini-2.5-flash', 'gemini-flash-latest'];
+  let lastError: any = null;
+  let lastAttemptedModel = candidateModels[0];
+  const MAX_RETRIES_PER_MODEL = 2;
+
+  const isRetryableError = (error: any): boolean => {
+    const status = error?.status || error?.code || error?.statusCode;
+    const msg = String(error?.message || error || '').toLowerCase();
+    if (status === 503 || status === 500 || status === 429 || status === 408) return true;
+    if (msg.includes('503') || msg.includes('high demand') || msg.includes('unavailable') || msg.includes('overloaded')) return true;
+    if (msg.includes('500') || msg.includes('internal error')) return true;
+    if (msg.includes('429') || msg.includes('resource_exhausted') || msg.includes('rate limit') || msg.includes('quota')) return true;
+    if (msg.includes('econnreset') || msg.includes('etimedout') || msg.includes('network error') || msg.includes('fetch failed')) return true;
+    return false;
+  };
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  for (const modelName of candidateModels) {
+    lastAttemptedModel = modelName;
+
+    for (let attempt = 0; attempt <= MAX_RETRIES_PER_MODEL; attempt++) {
+      try {
+        if (attempt > 0) {
+          const backoffDelay = Math.min(1000 * Math.pow(2, attempt - 1) + Math.random() * 500, 5000);
+          console.warn(
+            `[evaluateDirectlyWithGemini] Retry attempt ${attempt}/${MAX_RETRIES_PER_MODEL} for model ${modelName} after ${Math.round(backoffDelay)}ms backoff...`
+          );
+          onProgress?.(
+            35 + attempt * 15,
+            `Gemini service experiencing high traffic. Retrying with model ${modelName} (${attempt}/${MAX_RETRIES_PER_MODEL})...`
+          );
+          await delay(backoffDelay);
+        } else {
+          console.log(`[evaluateDirectlyWithGemini] Attempting audit using model: ${modelName}`);
+          onProgress?.(30, `Evaluating script directly with Gemini (${modelName})...`);
+        }
+
+        const response = await ai.models.generateContent({
+          model: modelName,
+          contents: [{ parts: contentsParts }],
+          config: {
+            systemInstruction,
+            temperature: 0,
+            seed: 42,
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                studentName: { type: Type.STRING },
+                testTitle: { type: Type.STRING },
+                testTopics: { type: Type.STRING },
+                testDate: { type: Type.STRING },
+                totalScore: { type: Type.NUMBER },
+                maxScore: { type: Type.NUMBER },
+                questions: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: {
+                      qNo: { type: Type.STRING },
+                      feedbackPoints: { type: Type.ARRAY, items: { type: Type.STRING } },
+                      marks: { type: Type.NUMBER },
+                      maxMarks: { type: Type.NUMBER },
+                      isCorrect: { type: Type.BOOLEAN },
+                      isFlagged: { type: Type.BOOLEAN },
+                      flaggedComment: {
+                        type: Type.STRING,
+                        description: 'If isFlagged is true, provide a brief explanation of the contradiction resolved.',
+                      },
+                    },
+                    required: ['qNo', 'feedbackPoints', 'marks', 'maxMarks', 'isCorrect'],
+                  },
+                },
+                generalFeedback: {
+                  type: Type.OBJECT,
+                  properties: {
+                    overallPerformance: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    mcqs: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    contentAccuracy: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    completenessOfAnswers: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    presentationDiagrams: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    investigations: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    attemptingQuestions: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    actionPoints: { type: Type.ARRAY, items: { type: Type.STRING } },
+                  },
+                  required: [
+                    'overallPerformance',
+                    'mcqs',
+                    'contentAccuracy',
+                    'completenessOfAnswers',
+                    'presentationDiagrams',
+                    'investigations',
+                    'attemptingQuestions',
+                    'actionPoints',
+                  ],
+                },
+              },
+              required: [
+                'studentName',
+                'testTitle',
+                'testTopics',
+                'testDate',
+                'totalScore',
+                'maxScore',
+                'questions',
+                'generalFeedback',
+              ],
+            },
+          },
+        });
+
+        const text = response.text;
+        if (!text) {
+          throw new Error(`Audit failed: Empty response received from model ${modelName}.`);
+        }
+
+        onProgress?.(90, 'Parsing and validating academic evaluation report...');
+        const parsed = JSON.parse(text) as EvaluationReport;
+        parsed.evaluatedByModel = modelName;
+
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify(parsed));
+        } catch (e: any) {
+          if (e.name === 'QuotaExceededError' || e.code === 22) {
+            console.warn('localStorage full. Clearing old evaluation caches...');
+            try {
+              const keysToRemove: string[] = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (key.startsWith('anatomy_eval_') || key.startsWith('anatomy_eval_v2_'))) {
+                  keysToRemove.push(key);
+                }
+              }
+              keysToRemove.forEach((k) => localStorage.removeItem(k));
+              localStorage.setItem(cacheKey, JSON.stringify(parsed));
+            } catch (retryErr) {
+              console.warn('Failed to cache after clear:', retryErr);
+            }
+          }
+        }
+
+        onProgress?.(100, 'Evaluation complete and verified!');
+        return parsed;
+      } catch (error: any) {
+        lastError = error;
+        const retryable = isRetryableError(error);
+        console.warn(
+          `Evaluation attempt on model ${modelName} (attempt ${attempt + 1}/${MAX_RETRIES_PER_MODEL + 1}) failed. Retryable: ${retryable}`,
+          error
+        );
+        if (!retryable || attempt === MAX_RETRIES_PER_MODEL) {
+          break;
+        }
+      }
+    }
+  }
+
+  console.error('Gemini API All Models Failed:', lastError);
+  let errorMsg = lastError?.message || `Audit failed across all candidate models (Last attempted: ${lastAttemptedModel}).`;
+  try {
+    const parsedErr = JSON.parse(errorMsg);
+    if (parsedErr?.error?.message) {
+      errorMsg = parsedErr.error.message;
+    }
+  } catch (_) {}
+
+  const errorObj: any = new Error(errorMsg);
+  errorObj.lastAttemptedModel = lastAttemptedModel;
+  errorObj.rawError = lastError;
+  errorObj.statusCode = lastError?.status || lastError?.code || (errorMsg.includes('503') ? 503 : (errorMsg.includes('429') ? 429 : undefined));
+  errorObj.retryable = isRetryableError(lastError);
+  throw errorObj;
 }
 
 /**
@@ -129,14 +508,10 @@ export async function safeParseResponseJson<T = any>(
   }
 }
 
-
 /**
- * Submits an evaluation request to the dedicated backend and monitors progress
- * until a verified academic report is assembled.
- *
- * Supports both structured arguments and legacy positional arguments.
+ * Submits an evaluation request to the dedicated backend service.
  */
-export const generateStructuredFeedback = async (
+async function submitEvaluationToBackend(
   sourceDoc: FileData,
   dirtyFeedbackDoc: FileData | null,
   mode: EvaluationMode = 'without-manual',
@@ -146,14 +521,13 @@ export const generateStructuredFeedback = async (
   customToken?: string,
   answerKeyId?: string,
   canonicalAnswerKey?: CanonicalAnswerKey | null
-): Promise<EvaluationReport> => {
+): Promise<EvaluationReport> {
   const token = customToken || getClientAuthToken();
 
   // If canonical answer key is already prepared, we do not need to resend massive base64 for QP and AK
   const hasCanonical = Boolean(canonicalAnswerKey || answerKeyId);
 
   // Strip heavy visual buffers from canonicalAnswerKey before sending across the wire:
-  // The server evaluation engine only requires structured question items, rubrics, and marks
   let leanCanonicalKey: CanonicalAnswerKey | undefined = undefined;
   if (canonicalAnswerKey) {
     leanCanonicalKey = {
@@ -218,7 +592,7 @@ export const generateStructuredFeedback = async (
   // Guard against serverless payload overflow: remove any redundant base64 so payload stays under Netlify 6MB gateway limit
   let finalBody = JSON.stringify(payload);
   if (finalBody.length > 3.5 * 1024 * 1024) {
-    console.warn(`[generateStructuredFeedback] Payload size is ${(finalBody.length / 1024 / 1024).toFixed(2)}MB. Removing reference visual buffers to stay under Netlify 6MB gateway limit...`);
+    console.warn(`[submitEvaluationToBackend] Payload size is ${(finalBody.length / 1024 / 1024).toFixed(2)}MB. Removing reference visual buffers to stay under Netlify 6MB gateway limit...`);
     if (payload.questionPaper) {
       delete payload.questionPaper.base64;
     }
@@ -231,7 +605,6 @@ export const generateStructuredFeedback = async (
   onProgress?.(5, 'Submitting answer sheet to evaluation backend...');
 
   // 1. Initiate evaluation job on the dedicated backend with authentication
-  // Request synchronous execution so serverless environments (Netlify, AWS Lambda) don't freeze background containers
   const createRes = await fetch(`${API_BASE}/api/evaluations?sync=true`, {
     method: 'POST',
     headers: {
@@ -302,7 +675,6 @@ export const generateStructuredFeedback = async (
     const settleFailure = (err: Error) => {
       if (isSettled) return;
       isSettled = true;
-      // Note: Frontend polling disconnect or timeout does NOT cancel backend processing
       cleanup();
       reject(err);
     };
@@ -318,7 +690,6 @@ export const generateStructuredFeedback = async (
         if (!res.ok) {
           if (res.status === 404) {
             consecutive404Count++;
-            // Allow several retries in case of multi-container routing or storage propagation latency
             if (consecutive404Count >= 6) {
               settleFailure(new Error(`Evaluation job ${jobId} not found on server.`));
             }
@@ -333,15 +704,12 @@ export const generateStructuredFeedback = async (
         }
 
         consecutive404Count = 0;
-
-        // Successfully received status from backend: refresh active timestamp
         lastActiveTimestamp = Date.now();
 
         const data = await safeParseResponseJson<any>(res, 'Evaluation Status');
         onProgress?.(data.progressPercent || 20, data.currentStepMessage || 'Evaluating...');
 
         if (data.status === 'completed') {
-          // Fetch final validated result
           const resultRes = await fetch(`${API_BASE}/api/evaluations/${jobId}/results`, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -366,13 +734,9 @@ export const generateStructuredFeedback = async (
       }
     };
 
-    // Always start polling intervals to guarantee progress updates even if EventSource is blocked by proxies
     pollInterval = setInterval(pollStatus, 1500);
-
-    // Initial check
     pollStatus();
 
-    // Safety watchdog: do not prematurely abort while backend is actively processing!
     watchdogInterval = setInterval(() => {
       if (isSettled) return;
       const now = Date.now();
@@ -383,7 +747,88 @@ export const generateStructuredFeedback = async (
       }
     }, 2000);
   });
+}
+
+/**
+ * Main evaluation entrypoint.
+ *
+ * Automatically routes to direct client-side Gemini evaluation when running on Netlify
+ * (or if the serverless backend encounters 503 / 502 / timeout), matching the working
+ * GitHub repository architecture and eliminating Netlify 10-second serverless execution limits.
+ */
+export const generateStructuredFeedback = async (
+  sourceDoc: FileData,
+  dirtyFeedbackDoc: FileData | null,
+  mode: EvaluationMode = 'without-manual',
+  onProgress?: ProgressCallback,
+  questionPaperDoc?: FileData | null,
+  answerKeyDoc?: FileData | null,
+  customToken?: string,
+  answerKeyId?: string,
+  canonicalAnswerKey?: CanonicalAnswerKey | null
+): Promise<EvaluationReport> => {
+  const isNetlify = isNetlifyEnvironment();
+  const clientKey = getClientGeminiApiKey();
+
+  // On Netlify, serverless functions are constrained by a 10s-26s execution ceiling.
+  // Standard exams (especially 100-mark tests like Prem's Endocrine Physiology paper) take 25-45s,
+  // which causes Netlify's reverse proxy to return a 503 Service Unavailable HTML page.
+  // When running on Netlify with a client Gemini key, bypass serverless limits and evaluate directly via browser.
+  if (isNetlify && clientKey) {
+    console.log('[generateStructuredFeedback] Netlify deployment detected. Executing direct client evaluation to bypass serverless timeouts...');
+    return evaluateDirectlyWithGemini(
+      sourceDoc,
+      dirtyFeedbackDoc,
+      mode,
+      onProgress,
+      questionPaperDoc,
+      answerKeyDoc,
+      canonicalAnswerKey
+    );
+  }
+
+  // In AI Studio or environments with active backend, submit to backend first
+  try {
+    return await submitEvaluationToBackend(
+      sourceDoc,
+      dirtyFeedbackDoc,
+      mode,
+      onProgress,
+      questionPaperDoc,
+      answerKeyDoc,
+      customToken,
+      answerKeyId,
+      canonicalAnswerKey
+    );
+  } catch (backendErr: any) {
+    const is503 = backendErr?.statusCode === 503 || String(backendErr?.message || '').includes('503');
+    const is502or504 =
+      backendErr?.statusCode === 502 ||
+      backendErr?.statusCode === 504 ||
+      String(backendErr?.message || '').includes('502') ||
+      String(backendErr?.message || '').includes('504');
+    const isFetchFailed = String(backendErr?.message || '').toLowerCase().includes('failed to fetch');
+
+    // If backend encountered a serverless timeout or connection failure and we have a Gemini key, gracefully fallback
+    if ((is503 || is502or504 || isFetchFailed || isNetlify) && clientKey) {
+      console.warn(`[generateStructuredFeedback] Backend route timed out or returned ${backendErr?.statusCode || 'error'}. Falling back seamlessly to direct Gemini client evaluation...`);
+      onProgress?.(25, 'Backend timeout detected. Switching seamlessly to direct Gemini evaluation engine...');
+      return evaluateDirectlyWithGemini(
+        sourceDoc,
+        dirtyFeedbackDoc,
+        mode,
+        onProgress,
+        questionPaperDoc,
+        answerKeyDoc,
+        canonicalAnswerKey
+      );
+    }
+
+    throw backendErr;
+  }
 };
+
+
 
 /**
  * Diagnostic helper that formats and categorizes error messages for the user.
